@@ -56,5 +56,6 @@ React, Node.js, Next.js, TypeScript. 1.6 years shipping.
 ## What I am doing here
 
 - Track 0: this pull request.
-- Track 1: filed three deep mobile findings (#109, #110, #111) covering action dock collision, reactive state desync on save, in-browser WebM player duration corruption, and layout misalignments, with visual evidence on my `track-1-evidence` branch.
+- Track 1 (UI bugs): filed three deep mobile findings (#109, #110, #111) covering action dock collision, reactive state desync on save, in-browser WebM player duration corruption, and layout misalignments, with visual evidence on my `track-1-evidence` branch.
+- Track 1 (Challenge 01): built the next-pass interactive mobile prototype in `challenges/01-mobile-transcript/next/index.html` with full design rationale in `challenges/01-mobile-transcript/next/README.md` (4-speaker layout at 320px, decoupled smart player dock, live transcribing state, and inline preview boundary).
 - Track 4 (next): building an end-to-end workflow on the WhipScribe API once the API credit is active.
