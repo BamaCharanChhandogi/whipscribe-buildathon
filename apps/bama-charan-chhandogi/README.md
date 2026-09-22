@@ -53,7 +53,8 @@ React, Node.js, Next.js, TypeScript. 1.6 years shipping.
 - No Tauri or Electron experience (I would learn for Track 2).
 - No prior audio/transcription product work.
 
-## What I plan to do here
+## What I am doing here
 
-Track 1 first: use WhipScribe on phone and desktop, file what is wrong, propose fixes with mockups.
-Then Track 4: build a workflow on the API — I want to see how WhipScribe handles real recordings before designing on top of it.
+- Track 0: this pull request.
+- Track 1: filed three deep mobile findings (#109, #110, #111) covering action dock collision, reactive state desync on save, in-browser WebM player duration corruption, and layout misalignments, with visual evidence on my `track-1-evidence` branch.
+- Track 4 (next): building an end-to-end workflow on the WhipScribe API once the API credit is active.
