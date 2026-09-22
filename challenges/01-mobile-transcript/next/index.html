@@ -1,0 +1,1109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WhipScribe — Mobile Transcript Reader (Next Pass Prototype)</title>
+  <style>
+    :root {
+      --primary: #15803d;
+      --primary-dark: #166534;
+      --primary-light: #dcfce7;
+      --surface: #ffffff;
+      --surface-subtle: #f8fafc;
+      --border: #e2e8f0;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --accent: #22c55e;
+      --speaker-1: #0284c7;
+      --speaker-2: #7c3aed;
+      --speaker-3: #d97706;
+      --speaker-4: #059669;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background: #0f172a;
+      color: #f8fafc;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px 10px 40px;
+    }
+
+    /* Top Benchmark & Controller Bar */
+    .bench-header {
+      max-width: 1000px;
+      width: 100%;
+      margin-bottom: 24px;
+      text-align: center;
+    }
+
+    .bench-title {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 8px;
+    }
+
+    .bench-sub {
+      color: #94a3b8;
+      font-size: 14px;
+      margin-bottom: 18px;
+    }
+
+    .controller-bar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+      background: #1e293b;
+      padding: 10px 14px;
+      border-radius: 9999px;
+      border: 1px solid #334155;
+    }
+
+    .chip-btn {
+      background: #0f172a;
+      color: #cbd5e1;
+      border: 1px solid #334155;
+      padding: 6px 14px;
+      border-radius: 9999px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .chip-btn:hover {
+      background: #334155;
+      color: #fff;
+    }
+
+    .chip-btn.active {
+      background: var(--primary);
+      border-color: var(--accent);
+      color: #fff;
+    }
+
+    /* Layout Container */
+    .app-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 32px;
+      width: 100%;
+      max-width: 1100px;
+      align-items: flex-start;
+    }
+
+    /* Device Mockup Wrapper */
+    .device-stage {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .device-pill {
+      font-size: 12px;
+      font-weight: 600;
+      color: #94a3b8;
+      background: #1e293b;
+      padding: 4px 12px;
+      border-radius: 9999px;
+      margin-bottom: 12px;
+      border: 1px solid #334155;
+    }
+
+    .phone-viewport {
+      width: 375px;
+      height: 720px;
+      background: var(--surface);
+      color: var(--text);
+      border-radius: 36px;
+      box-shadow: 0 25px 50px -12px rgba(0,0,0,0.7), 0 0 0 10px #1e293b, 0 0 0 12px #334155;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Mobile Status Bar Mock */
+    .mobile-status {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 20px 4px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #0f172a;
+      background: var(--surface);
+      z-index: 20;
+    }
+
+    /* Navigation Bar */
+    .reader-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 16px;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface);
+      z-index: 20;
+    }
+
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+    }
+
+    .icon-btn {
+      background: none;
+      border: none;
+      font-size: 18px;
+      color: var(--text);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+    }
+
+    .icon-btn:hover {
+      background: var(--surface-subtle);
+    }
+
+    .nav-title-group {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+
+    .nav-filename {
+      font-size: 13px;
+      font-weight: 700;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 170px;
+    }
+
+    .nav-meta-badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .badge-saved {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      color: #16a34a;
+      font-weight: 600;
+    }
+
+    .badge-unsaved {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      color: #ea580c;
+      font-weight: 600;
+    }
+
+    /* Tabs */
+    .reader-tabs {
+      display: flex;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface);
+      z-index: 15;
+    }
+
+    .reader-tab {
+      flex: 1;
+      padding: 10px 4px;
+      text-align: center;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      border-bottom: 2px solid transparent;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .reader-tab.active {
+      color: var(--primary);
+      border-bottom-color: var(--primary);
+    }
+
+    /* Interactive Search Header (Conditional) */
+    .search-strip {
+      display: none;
+      align-items: center;
+      padding: 8px 12px;
+      background: #f1f5f9;
+      border-bottom: 1px solid var(--border);
+      gap: 8px;
+      animation: slideDown 0.15s ease-out;
+    }
+
+    .search-strip.show {
+      display: flex;
+    }
+
+    .search-input {
+      flex: 1;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 6px 10px;
+      font-size: 13px;
+      outline: none;
+      background: #fff;
+    }
+
+    .search-count {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+
+    /* Main Scrollable Transcript Body */
+    .transcript-scroll {
+      flex: 1;
+      overflow-y: auto;
+      padding: 14px 16px 140px; /* Space for the decoupled dock */
+      scroll-behavior: smooth;
+    }
+
+    /* Utterance Block */
+    .utterance {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 16px;
+      transition: background 0.15s ease;
+      border-radius: 8px;
+      padding: 6px 8px;
+    }
+
+    .utterance.active-playing {
+      background: #f0fdf4;
+      border-left: 3px solid var(--accent);
+    }
+
+    .utterance-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 4px;
+    }
+
+    .speaker-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .speaker-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+
+    .sp-1 { color: var(--speaker-1); }
+    .sp-1 .speaker-dot { background: var(--speaker-1); }
+    .sp-2 { color: var(--speaker-2); }
+    .sp-2 .speaker-dot { background: var(--speaker-2); }
+    .sp-3 { color: var(--speaker-3); }
+    .sp-3 .speaker-dot { background: var(--speaker-3); }
+    .sp-4 { color: var(--speaker-4); }
+    .sp-4 .speaker-dot { background: var(--speaker-4); }
+
+    .timestamp-btn {
+      font-size: 11px;
+      font-family: ui-monospace, SFMono-Regular, monospace;
+      color: var(--text-muted);
+      background: #f1f5f9;
+      padding: 2px 6px;
+      border-radius: 4px;
+      cursor: pointer;
+      border: none;
+    }
+
+    .timestamp-btn:hover {
+      background: #e2e8f0;
+      color: var(--text);
+    }
+
+    .utterance-text {
+      font-size: 14.5px;
+      line-height: 1.55;
+      color: #1e293b;
+      /* Left-aligned, never justified on narrow screens! */
+      text-align: left;
+    }
+
+    .search-highlight {
+      background: #fef08a;
+      padding: 1px 3px;
+      border-radius: 2px;
+      font-weight: 600;
+    }
+
+    /* Contextual Selection Bubble */
+    .selection-bubble {
+      display: none;
+      position: absolute;
+      background: #0f172a;
+      color: #fff;
+      border-radius: 10px;
+      padding: 4px;
+      gap: 4px;
+      box-shadow: 0 10px 25px -5px rgba(0,0,0,0.5);
+      z-index: 50;
+      animation: popIn 0.15s ease-out;
+    }
+
+    .selection-bubble.show {
+      display: flex;
+    }
+
+    .bubble-action {
+      background: transparent;
+      border: none;
+      color: #f8fafc;
+      font-size: 11.5px;
+      font-weight: 600;
+      padding: 6px 8px;
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .bubble-action:hover {
+      background: #334155;
+    }
+
+    /* Inline Preview Boundary (Placed naturally in scroll stream) */
+    .preview-boundary-card {
+      margin: 24px 0 12px;
+      padding: 16px;
+      background: #f8fafc;
+      border: 1px dashed #cbd5e1;
+      border-radius: 12px;
+      text-align: center;
+    }
+
+    .preview-title {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .preview-sub {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+      line-height: 1.4;
+    }
+
+    .btn-topup {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--primary);
+      color: #fff;
+      font-size: 13px;
+      font-weight: 700;
+      padding: 8px 16px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 2px 4px rgba(21,128,61,0.2);
+    }
+
+    /* Decoupled Smart Bottom Audio Dock */
+    .audio-dock {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-top: 1px solid var(--border);
+      padding: 8px 16px 18px;
+      z-index: 30;
+      box-shadow: 0 -4px 12px rgba(0,0,0,0.04);
+      transition: transform 0.25s ease;
+    }
+
+    .audio-dock.collapsed {
+      transform: translateY(calc(100% - 16px));
+    }
+
+    .dock-pill-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+
+    .time-readout {
+      font-size: 11px;
+      font-family: ui-monospace, SFMono-Regular, monospace;
+      color: var(--text-muted);
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .dock-scrubber {
+      flex: 1;
+      height: 4px;
+      background: #e2e8f0;
+      border-radius: 9999px;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .scrubber-progress {
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 25%;
+      background: var(--primary);
+      border-radius: 9999px;
+    }
+
+    .scrubber-thumb {
+      position: absolute;
+      left: 25%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 12px;
+      height: 12px;
+      background: var(--primary);
+      border: 2px solid #fff;
+      border-radius: 50%;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+    }
+
+    .dock-controls {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .ctrl-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .play-btn {
+      width: 38px;
+      height: 38px;
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(21,128,61,0.3);
+    }
+
+    .skip-btn {
+      background: none;
+      border: none;
+      color: var(--text);
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .speed-btn {
+      background: #f1f5f9;
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 8px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    /* Floating Edit Toolbar Dock (Replaces Audio Player when Editing!) */
+    .edit-mode-dock {
+      display: none;
+      position: absolute;
+      bottom: 16px;
+      left: 16px;
+      right: 16px;
+      background: #0f172a;
+      color: #fff;
+      border-radius: 9999px;
+      padding: 6px 14px;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+      z-index: 40;
+      animation: popIn 0.2s ease-out;
+    }
+
+    .edit-mode-dock.show {
+      display: flex;
+    }
+
+    .edit-info {
+      font-size: 12px;
+      font-weight: 600;
+      color: #94a3b8;
+    }
+
+    .btn-save-changes {
+      background: #22c55e;
+      color: #0f172a;
+      font-weight: 700;
+      font-size: 12px;
+      padding: 6px 14px;
+      border-radius: 9999px;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn-discard {
+      background: transparent;
+      color: #cbd5e1;
+      font-size: 12px;
+      border: none;
+      cursor: pointer;
+      margin-right: 8px;
+    }
+
+    /* Unified Bottom Action Sheet (Off-canvas) */
+    .scrim {
+      display: none;
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      backdrop-filter: blur(2px);
+      z-index: 60;
+    }
+
+    .scrim.show {
+      display: block;
+    }
+
+    .bottom-sheet {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--surface);
+      border-radius: 20px 20px 0 0;
+      padding: 16px 20px 24px;
+      z-index: 70;
+      transform: translateY(100%);
+      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .bottom-sheet.open {
+      transform: translateY(0);
+    }
+
+    .sheet-handle {
+      width: 36px;
+      height: 4px;
+      background: #cbd5e1;
+      border-radius: 9999px;
+      margin: 0 auto 14px;
+    }
+
+    .sheet-title {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .sheet-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 13.5px;
+      font-weight: 600;
+    }
+
+    /* Live Processing Skeleton / State */
+    .processing-view {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 30px 20px;
+      height: 100%;
+      text-align: center;
+    }
+
+    .processing-view.show {
+      display: flex;
+    }
+
+    .pulse-ring {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: var(--primary-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary);
+      font-size: 24px;
+      margin-bottom: 16px;
+      animation: pulse 1.5s infinite;
+    }
+
+    /* Analysis & Spec Panel */
+    .spec-panel {
+      flex: 1;
+      min-width: 340px;
+      max-width: 550px;
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 16px;
+      padding: 24px;
+    }
+
+    .spec-badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      background: var(--primary);
+      color: #fff;
+      padding: 3px 8px;
+      border-radius: 4px;
+      margin-bottom: 12px;
+    }
+
+    .spec-h2 {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .spec-list {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      font-size: 13.5px;
+      line-height: 1.5;
+      color: #cbd5e1;
+    }
+
+    .spec-item-title {
+      font-weight: 700;
+      color: #f8fafc;
+      margin-bottom: 2px;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(21,128,61, 0.4); }
+      70% { transform: scale(1); box-shadow: 0 0 0 14px rgba(21,128,61, 0); }
+      100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(21,128,61, 0); }
+    }
+
+    @keyframes slideDown {
+      from { transform: translateY(-8px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    @keyframes popIn {
+      from { transform: scale(0.9); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Controller -->
+  <header class="bench-header">
+    <h1 class="bench-title">UI Challenge 01 — Mobile Transcript Reader (Next Pass)</h1>
+    <p class="bench-sub">Solving dock collisions, 320px 4-speaker layouts, and reactive saving state.</p>
+    
+    <div class="controller-bar">
+      <button class="chip-btn active" onclick="setMode('default')">1. Default (4 Speakers)</button>
+      <button class="chip-btn" onclick="setMode('search')">2. Search Overlay</button>
+      <button class="chip-btn" onclick="setMode('selection')">3. Text Selection Action</button>
+      <button class="chip-btn" onclick="setMode('edit')">4. Edit Mode (No Collision)</button>
+      <button class="chip-btn" onclick="setMode('processing')">5. Live Transcribing State</button>
+      <button class="chip-btn" onclick="toggleWidth(320)">Viewport: 320px</button>
+      <button class="chip-btn" onclick="toggleWidth(375)">375px</button>
+      <button class="chip-btn" onclick="toggleWidth(390)">390px</button>
+    </div>
+  </header>
+
+  <!-- Interactive Area -->
+  <main class="app-container">
+    
+    <!-- Phone Mockup -->
+    <section class="device-stage">
+      <div class="device-pill" id="viewportIndicator">iPhone Mini / SE · 375px</div>
+      
+      <div class="phone-viewport" id="phoneViewport">
+        
+        <!-- Status Bar -->
+        <div class="mobile-status">
+          <span>9:41</span>
+          <span>5G · 100%</span>
+        </div>
+
+        <!-- App Nav -->
+        <nav class="reader-nav">
+          <div class="nav-left">
+            <button class="icon-btn" title="Back">←</button>
+            <div class="nav-title-group">
+              <span class="nav-filename">Team_Standup_Sep22.mp4</span>
+              <span class="nav-meta-badge">
+                <span>1m 05s</span> · <span>EN</span> · 
+                <span id="saveBadge" class="badge-saved">✓ Saved</span>
+              </span>
+            </div>
+          </div>
+          <div style="display: flex; gap: 4px;">
+            <button class="icon-btn" onclick="toggleSearch()" title="Search">🔍</button>
+            <button class="icon-btn" onclick="openSheet()" title="More Menu">⋯</button>
+          </div>
+        </nav>
+
+        <!-- Tabs -->
+        <div class="reader-tabs">
+          <div class="reader-tab active">Transcript</div>
+          <div class="reader-tab">Summary</div>
+          <div class="reader-tab">AI Chat</div>
+        </div>
+
+        <!-- Search Bar Strip -->
+        <div class="search-strip" id="searchStrip">
+          <input type="text" class="search-input" id="searchInput" placeholder="Search transcript..." value="action items" oninput="highlightSearch(this.value)">
+          <span class="search-count" id="matchCount">2 matches</span>
+          <button class="icon-btn" style="width:24px; height:24px; font-size:12px;" onclick="toggleSearch()">✕</button>
+        </div>
+
+        <!-- Normal Transcript Scroll Body -->
+        <div class="transcript-scroll" id="transcriptScroll">
+          
+          <!-- Speaker 1: Alex -->
+          <article class="utterance sp-1 active-playing" id="utt-1">
+            <div class="utterance-header">
+              <span class="speaker-pill"><span class="speaker-dot"></span>Alex (Host)</span>
+              <button class="timestamp-btn" onclick="seekAudio('0:00')">0:00</button>
+            </div>
+            <p class="utterance-text">
+              Welcome everyone. Let's review the critical <span class="search-highlight">action items</span> from the latest deployment and sprint goals.
+            </p>
+          </article>
+
+          <!-- Speaker 2: Sarah -->
+          <article class="utterance sp-2" id="utt-2">
+            <div class="utterance-header">
+              <span class="speaker-pill"><span class="speaker-dot"></span>Sarah</span>
+              <button class="timestamp-btn" onclick="seekAudio('0:14')">0:14</button>
+            </div>
+            <p class="utterance-text">
+              On the frontend, the in-browser recording WebM bug on Android has been resolved. Duration cues are now patched before playback starts.
+            </p>
+          </article>
+
+          <!-- Speaker 3: David -->
+          <article class="utterance sp-3" id="utt-3">
+            <div class="utterance-header">
+              <span class="speaker-pill"><span class="speaker-dot"></span>David</span>
+              <button class="timestamp-btn" onclick="seekAudio('0:32')">0:32</button>
+            </div>
+            <p class="utterance-text">
+              I also fixed the floating editor dock so it replaces the audio dock in edit mode instead of stacking over it.
+            </p>
+          </article>
+
+          <!-- Speaker 4: Priya -->
+          <article class="utterance sp-4" id="utt-4">
+            <div class="utterance-header">
+              <span class="speaker-pill"><span class="speaker-dot"></span>Priya</span>
+              <button class="timestamp-btn" onclick="seekAudio('0:48')">0:48</button>
+            </div>
+            <p class="utterance-text">
+              Great. What are our remaining <span class="search-highlight">action items</span> before releasing the final trial candidate?
+            </p>
+          </article>
+
+          <!-- Inline Preview Gate (Placed at boundary, not eating sticky viewport) -->
+          <section class="preview-boundary-card">
+            <div class="preview-title">Free Preview Limit Reached</div>
+            <p class="preview-sub">1:05 free preview ended. Top up $1 to unlock full recording audio and export.</p>
+            <button class="btn-topup">Top up $1 for 1 Hour →</button>
+          </section>
+
+        </div>
+
+        <!-- Processing / Streaming State (Hidden by default) -->
+        <div class="processing-view" id="processingView">
+          <div class="pulse-ring">⚡</div>
+          <h3 style="font-size:16px; font-weight:700; margin-bottom:6px;">Transcribing audio...</h3>
+          <p style="font-size:12px; color:var(--text-muted); margin-bottom:18px;">Whisper GPU model active · 90% processed</p>
+          <div style="width:180px; height:6px; background:#e2e8f0; border-radius:9999px; overflow:hidden; margin-bottom:12px;">
+            <div style="width:90%; height:100%; background:var(--primary);"></div>
+          </div>
+          <span style="font-size:11px; font-family:monospace; color:#64748b;">Chunk 4 of 4 · diarizing 4 speakers</span>
+        </div>
+
+        <!-- Contextual Selection Bubble -->
+        <div class="selection-bubble" id="selectionBubble" style="top: 140px; left: 40px;">
+          <button class="bubble-action" onclick="bubbleAction('Quote Copied')">📋 Copy Quote</button>
+          <button class="bubble-action" onclick="bubbleAction('Playing from second')">▶ Play</button>
+          <button class="bubble-action" onclick="bubbleAction('Opened AI Chat')">✨ Ask AI</button>
+        </div>
+
+        <!-- Floating Edit Mode Dock (Replaces Audio Player when active!) -->
+        <div class="edit-mode-dock" id="editDock">
+          <div class="edit-info">1 line modified</div>
+          <div style="display:flex; align-items:center;">
+            <button class="btn-discard" onclick="setMode('default')">Discard</button>
+            <button class="btn-save-changes" onclick="saveEdits()">Save changes</button>
+          </div>
+        </div>
+
+        <!-- Standard Audio Player Dock -->
+        <footer class="audio-dock" id="audioDock">
+          <div class="dock-pill-bar">
+            <span class="time-readout" id="timeDisplay">0:00 / 1:05</span>
+            <div class="dock-scrubber" onclick="scrubClick(event)">
+              <div class="scrubber-progress" id="scrubberFill"></div>
+              <div class="scrubber-thumb" id="scrubberThumb"></div>
+            </div>
+            <button class="speed-btn" onclick="cycleSpeed(this)">1x</button>
+          </div>
+          <div class="dock-controls">
+            <button class="skip-btn" onclick="skip(-5)">⟲ 5s</button>
+            <button class="play-btn" id="playBtn" onclick="togglePlay()">▶</button>
+            <button class="skip-btn" onclick="skip(5)">5s ⟳</button>
+          </div>
+        </footer>
+
+        <!-- Bottom Sheet Scrim & Action Sheet -->
+        <div class="scrim" id="scrim" onclick="closeSheet()"></div>
+        <div class="bottom-sheet" id="bottomSheet">
+          <div class="sheet-handle"></div>
+          <div class="sheet-title">Actions & Reading Settings</div>
+          <div class="sheet-row">
+            <span>Show timestamps</span>
+            <input type="checkbox" checked>
+          </div>
+          <div class="sheet-row">
+            <span>Speaker avatars</span>
+            <input type="checkbox" checked>
+          </div>
+          <div class="sheet-row">
+            <span>Export Transcript (PDF, SRT, TXT)</span>
+            <button class="chip-btn" style="padding:4px 8px;">Download</button>
+          </div>
+          <div class="sheet-row" style="color:#ef4444;">
+            <span>Delete recording</span>
+            <button class="icon-btn" style="color:#ef4444;">🗑</button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Side-by-Side Architectural Rationale Panel -->
+    <aside class="spec-panel">
+      <span class="spec-badge">Next Pass Rationale</span>
+      <h2 class="spec-h2">What This Fixes vs the Original</h2>
+
+      <div class="spec-list">
+        <div>
+          <div class="spec-item-title">1. No Component Collisions (Solves Issue #109)</div>
+          <p>In the original design, when a user enters Edit mode, a floating dark bar appears on top of the audio player and upsell cards. In this next pass, the floating edit bar <strong>replaces the audio dock</strong>, keeping the viewport clean.</p>
+        </div>
+
+        <div>
+          <div class="spec-item-title">2. Reactive Save State Feedback</div>
+          <p>Clicking "Save changes" immediately updates the top header badge to <span style="color:#22c55e; font-weight:700;">✓ Saved</span>. In the original live product, the badge stayed stuck on "Unsaved edits".</p>
+        </div>
+
+        <div>
+          <div class="spec-item-title">3. 4-Speaker Meeting at 320px</div>
+          <p>Narrow screens (320px) previously suffered from margin bloat. We use color-coded speaker dots and left-aligned text (no print-style justification) ensuring 100% readable text wrapping.</p>
+        </div>
+
+        <div>
+          <div class="spec-item-title">4. Decoupled Inline Preview Limit</div>
+          <p>The "Keep reading" banner in the original app permanently consumed 120px of bottom screen real estate. Here, it sits inline right at the 1:05 boundary.</p>
+        </div>
+
+        <div>
+          <div class="spec-item-title">5. First-Class Processing State</div>
+          <p>Added the missing live transcribing screen with an active pulse indicator, progress bar, and speaker diarization step indicator.</p>
+        </div>
+      </div>
+    </aside>
+
+  </main>
+
+  <script>
+    let isPlaying = false;
+    let currentTime = 0;
+    const duration = 65;
+    let playInterval = null;
+
+    function togglePlay() {
+      isPlaying = !isPlaying;
+      const btn = document.getElementById('playBtn');
+      if (isPlaying) {
+        btn.textContent = '⏸';
+        playInterval = setInterval(() => {
+          currentTime += 1;
+          if (currentTime > duration) currentTime = 0;
+          updatePlaybackUI();
+        }, 1000);
+      } else {
+        btn.textContent = '▶';
+        clearInterval(playInterval);
+      }
+    }
+
+    function updatePlaybackUI() {
+      const mins = Math.floor(currentTime / 60);
+      const secs = currentTime % 60;
+      document.getElementById('timeDisplay').textContent = `${mins}:${secs < 10 ? '0' : ''}${secs} / 1:05`;
+      
+      const pct = (currentTime / duration) * 100;
+      document.getElementById('scrubberFill').style.width = pct + '%';
+      document.getElementById('scrubberThumb').style.left = pct + '%';
+
+      // Synchronize speaker active highlight
+      document.querySelectorAll('.utterance').forEach(u => u.classList.remove('active-playing'));
+      if (currentTime < 14) document.getElementById('utt-1').classList.add('active-playing');
+      else if (currentTime < 32) document.getElementById('utt-2').classList.add('active-playing');
+      else if (currentTime < 48) document.getElementById('utt-3').classList.add('active-playing');
+      else document.getElementById('utt-4').classList.add('active-playing');
+    }
+
+    function skip(sec) {
+      currentTime = Math.max(0, Math.min(duration, currentTime + sec));
+      updatePlaybackUI();
+    }
+
+    function seekAudio(ts) {
+      const parts = ts.split(':');
+      currentTime = parseInt(parts[0]) * 60 + parseInt(parts[1]);
+      updatePlaybackUI();
+    }
+
+    function cycleSpeed(btn) {
+      if (btn.textContent === '1x') btn.textContent = '1.5x';
+      else if (btn.textContent === '1.5x') btn.textContent = '2x';
+      else btn.textContent = '1x';
+    }
+
+    function toggleSearch() {
+      const strip = document.getElementById('searchStrip');
+      strip.classList.toggle('show');
+    }
+
+    function highlightSearch(val) {
+      const countEl = document.getElementById('matchCount');
+      if (!val.trim()) {
+        countEl.textContent = '0 matches';
+      } else {
+        countEl.textContent = '2 matches';
+      }
+    }
+
+    function openSheet() {
+      document.getElementById('scrim').classList.add('show');
+      document.getElementById('bottomSheet').classList.add('open');
+    }
+
+    function closeSheet() {
+      document.getElementById('scrim').classList.remove('show');
+      document.getElementById('bottomSheet').classList.remove('open');
+    }
+
+    function setMode(mode) {
+      const pView = document.getElementById('processingView');
+      const tScroll = document.getElementById('transcriptScroll');
+      const editDock = document.getElementById('editDock');
+      const audioDock = document.getElementById('audioDock');
+      const bubble = document.getElementById('selectionBubble');
+      const searchStrip = document.getElementById('searchStrip');
+
+      // Reset
+      pView.classList.remove('show');
+      tScroll.style.display = 'block';
+      editDock.classList.remove('show');
+      audioDock.style.display = 'block';
+      bubble.classList.remove('show');
+      searchStrip.classList.remove('show');
+
+      if (mode === 'processing') {
+        pView.classList.add('show');
+        tScroll.style.display = 'none';
+        audioDock.style.display = 'none';
+      } else if (mode === 'edit') {
+        editDock.classList.add('show');
+        audioDock.style.display = 'none'; // Replaced dock!
+        document.getElementById('saveBadge').className = 'badge-unsaved';
+        document.getElementById('saveBadge').textContent = '● Unsaved edits';
+      } else if (mode === 'selection') {
+        bubble.classList.add('show');
+      } else if (mode === 'search') {
+        searchStrip.classList.add('show');
+      }
+    }
+
+    function saveEdits() {
+      document.getElementById('editDock').classList.remove('show');
+      document.getElementById('audioDock').style.display = 'block';
+      const badge = document.getElementById('saveBadge');
+      badge.className = 'badge-saved';
+      badge.textContent = '✓ Saved';
+    }
+
+    function bubbleAction(action) {
+      alert(`${action}!`);
+      document.getElementById('selectionBubble').classList.remove('show');
+    }
+
+    function toggleWidth(w) {
+      document.getElementById('phoneViewport').style.width = w + 'px';
+      document.getElementById('viewportIndicator').textContent = `Viewport: ${w}px`;
+    }
+  </script>
+</body>
+</html>
