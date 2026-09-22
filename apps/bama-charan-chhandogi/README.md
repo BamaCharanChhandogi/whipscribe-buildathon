@@ -7,7 +7,7 @@ React, Node.js, Next.js, TypeScript. 1.6 years shipping.
 
 | | |
 |---|---|
-| LinkedIn | [linkedin.com/in/bama-charan-chhandogi](https://www.linkedin.com/in/bama-charan-chhandogi/) |
+| LinkedIn | [linkedin.com/in/bamacharanchhandogi](https://www.linkedin.com/in/bamacharanchhandogi/) |
 | GitHub | [github.com/BamaCharanChhandogi](https://github.com/BamaCharanChhandogi) |
 | Portfolio | [bamacharan.com](https://bamacharan.com) |
 | X | [@BamacharanCh](https://x.com/BamacharanCh) |
@@ -22,12 +22,13 @@ React, Node.js, Next.js, TypeScript. 1.6 years shipping.
 | 2 npm packages (use-react-summary, use-react-GFG) | React, Node.js, Google Generative AI | 300+ downloads/month | [npm](https://www.npmjs.com/~bamacharan) |
 | GitFinder | React, Firebase, GitHub API, OAuth | 26 stars, 35 forks, 20+ contributors | [gitfinder.bamacharan.com](https://gitfinder.bamacharan.com) |
 | READMEasy | React, Gemini API | 18 stars, 31 forks | [readm-easy.vercel.app](https://readm-easy.vercel.app) |
+| Engram | Next.js 15, Drizzle ORM, Neon Postgres, Gemini AI | Active | [engram.bamacharan.com](http://engram.bamacharan.com/) |
 
 ### Things I own end to end
 
 | What | Stack | What I did |
 |------|-------|------------|
-| [Engram](https://github.com/BamaCharanChhandogi/Engram) | Next.js 15, Drizzle ORM, Neon Postgres, Gemini 3.6 Flash | Built from scratch. Intercepts AI coding session diffs from Cursor and Claude Code, generates daily active-recall challenges so developers retain comprehension of AI-generated code. Sole author, every commit mine. |
+| [Engram](http://engram.bamacharan.com/) ([GitHub](https://github.com/BamaCharanChhandogi/Engram)) | Next.js 15, Drizzle ORM, Neon Postgres, Gemini 3.6 Flash | Built from scratch. Intercepts AI coding session diffs from Cursor and Claude Code, generates daily active-recall challenges so developers retain comprehension of AI-generated code. Sole author, every commit mine. |
 | [Money-Mentor](https://moneymentor.bamacharan.com) | MERN, Redis, JWT, AI categorisation | Full finance platform with expense tracking, budgeting, bank integration. JWT auth, RBAC, data encryption. Sole author. |
 | ClipWise AI (current job) | React, Node.js, production | Full-time software developer. Shipping features to real customers in production. |
 
