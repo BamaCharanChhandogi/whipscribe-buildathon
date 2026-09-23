@@ -238,9 +238,28 @@ export default function Home() {
     };
   }, [isRecording]);
 
+  /* Processing progress state */
+  const [processSeconds, setProcessSeconds] = useState(0);
+  const [jobProgress, setJobProgress] = useState(0);
+
+  useEffect(() => {
+    let interval: NodeJS.Timeout | null = null;
+    if (state === "uploading" || state === "processing" || state === "analyzing") {
+      setProcessSeconds(0);
+      setJobProgress(10);
+      interval = setInterval(() => {
+        setProcessSeconds((s) => s + 1);
+      }, 1000);
+    }
+    return () => {
+      if (interval) clearInterval(interval);
+    };
+  }, [state]);
+
   /* ── Upload & Process ── */
   const handleUpload = useCallback(async (file: File) => {
     setState("uploading");
+    setJobProgress(15);
     setError("");
     setFileName(file.name);
     setAudioUrl(URL.createObjectURL(file));
@@ -252,6 +271,7 @@ export default function Home() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Upload failed");
       setJobId(data.job_id);
+      setJobProgress(30);
       setState("processing");
       pollJob(data.job_id);
     } catch (e) {
@@ -264,11 +284,19 @@ export default function Home() {
   const pollJob = useCallback(async (id: string) => {
     const maxAttempts = 120;
     for (let i = 0; i < maxAttempts; i++) {
-      await new Promise((r) => setTimeout(r, 3000));
+      await new Promise((r) => setTimeout(r, 2500));
       try {
         const res = await fetch(`/api/status/${id}`);
         const job = await res.json();
+
+        if (typeof job.progress === "number" && job.progress > 0) {
+          setJobProgress(job.progress);
+        } else {
+          setJobProgress((p) => Math.min(p + 8, 92));
+        }
+
         if (job.status === "done") {
+          setJobProgress(95);
           setState("analyzing");
           await runAnalysis(id);
           return;
@@ -676,11 +704,44 @@ ${transcript.segments.map((s) => `[${fmt(s.start)}] ${spk(s.speaker)}: ${s.text}
 
     return (
       <div className="min-h-screen bg-[#090a0f] text-[#f0f3f8] flex flex-col items-center justify-center p-6">
-        <div className="w-full max-w-sm space-y-4 text-center p-6 bg-[#10121a] border border-[#1e2230] rounded">
-          <div className="w-8 h-8 rounded-full border-2 border-[#2b3044] border-t-indigo-400 animate-spin mx-auto" />
-          <div className="space-y-1">
-            <h3 className="text-sm font-medium text-white">{stepLabel}</h3>
-            <p className="text-xs font-mono text-[#5e667e]">{fileName || `job: ${jobId.slice(0, 12)}`}</p>
+        <div className="w-full max-w-md space-y-4 p-5 bg-[#10121a] border border-[#1e2230] rounded">
+          <div className="flex items-center justify-between text-xs font-mono text-[#9ba3b8] border-b border-[#1e2230] pb-2.5">
+            <span className="flex items-center gap-1.5 text-indigo-400 font-medium">
+              <span className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse" />
+              {state === "uploading" ? "Payload Transfer" : state === "processing" ? "GPU Diarization" : "AI Synthesis"}
+            </span>
+            <span>Elapsed: {processSeconds}s</span>
+          </div>
+
+          <div className="space-y-2">
+            <div className="flex items-center justify-between text-xs">
+              <span className="text-white font-medium">{stepLabel}</span>
+              <span className="font-mono text-indigo-400 font-medium">{jobProgress}%</span>
+            </div>
+            {/* Progress bar */}
+            <div className="w-full h-1 bg-[#161822] rounded overflow-hidden">
+              <div
+                className="h-full bg-indigo-500 transition-all duration-300 ease-out"
+                style={{ width: `${Math.max(jobProgress, 8)}%` }}
+              />
+            </div>
+          </div>
+
+          <div className="text-[11px] font-mono text-[#5e667e] flex items-center justify-between pt-1">
+            <span>{fileName || `job: ${jobId.slice(0, 12)}`}</span>
+            <span>Est. ~25s</span>
+          </div>
+
+          <div className="pt-2 border-t border-[#1e2230] flex justify-end">
+            <button
+              onClick={() => {
+                setState("idle");
+                setError("");
+              }}
+              className="text-xs font-mono text-[#9ba3b8] hover:text-white underline"
+            >
+              Cancel
+            </button>
           </div>
         </div>
       </div>
