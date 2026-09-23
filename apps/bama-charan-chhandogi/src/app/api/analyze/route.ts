@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getTranscript } from "@/lib/whipscribe";
 import { analyzeStandup } from "@/lib/gemini";
 
+export const dynamic = "force-dynamic";
 export const maxDuration = 120;
 
 export async function POST(req: NextRequest) {

@@ -286,7 +286,10 @@ export default function Home() {
     for (let i = 0; i < maxAttempts; i++) {
       await new Promise((r) => setTimeout(r, 2500));
       try {
-        const res = await fetch(`/api/status/${id}`);
+        const res = await fetch(`/api/status/${id}?_t=${Date.now()}`, {
+          cache: "no-store",
+          headers: { "Cache-Control": "no-cache" },
+        });
         const job = await res.json();
 
         if (typeof job.progress === "number" && job.progress > 0) {
