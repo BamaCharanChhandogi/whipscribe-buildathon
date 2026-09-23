@@ -52,7 +52,7 @@ type AppState = "idle" | "uploading" | "processing" | "analyzing" | "done" | "er
 const fmt = (s: number) =>
   `${Math.floor(s / 60).toString().padStart(2, "0")}:${Math.floor(s % 60).toString().padStart(2, "0")}`;
 
-/* ───────── Clean SVG Geometric Icons (Zero Emojis) ───────── */
+/* ───────── Clean SVG Geometric Icons ───────── */
 function IconPlay({ className = "w-3.5 h-3.5" }: { className?: string }) {
   return (
     <svg className={className} viewBox="0 0 24 24" fill="currentColor">
@@ -113,14 +113,6 @@ function IconDownload({ className = "w-3.5 h-3.5" }: { className?: string }) {
   return (
     <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.75}>
       <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-    </svg>
-  );
-}
-
-function IconTerminal({ className = "w-3.5 h-3.5" }: { className?: string }) {
-  return (
-    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.75}>
-      <path strokeLinecap="round" strokeLinejoin="round" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
     </svg>
   );
 }
@@ -217,6 +209,7 @@ export default function Home() {
   const [speakerNames, setSpeakerNames] = useState<Record<string, string>>({
     "Speaker 0": "Alex (Lead)",
     "Speaker 1": "Sarah (Backend)",
+    Unknown: "Bama (Dev)",
   });
   const [targetRepo, setTargetRepo] = useState<string>("BamaCharanChhandogi/shipnotes");
   const [copiedId, setCopiedId] = useState<string | null>(null);
@@ -378,6 +371,7 @@ export default function Home() {
     setSpeakerNames({
       "Speaker 0": "Alex (Lead)",
       "Speaker 1": "Sarah (Backend)",
+      Unknown: "Bama (Dev)",
     });
     setState("done");
   };
@@ -395,7 +389,7 @@ export default function Home() {
     return (m || 0) * 60 + (s || 0);
   };
 
-  const spk = (id: string) => speakerNames[id] || id;
+  const spk = (id: string) => speakerNames[id] || (id === "Unknown" ? "Bama (Dev)" : id);
 
   /* ── Copy Helper ── */
   const copy = (text: string, id: string) => {
@@ -509,26 +503,26 @@ ${transcript.segments.map((s) => `[${fmt(s.start)}] ${spk(s.speaker)}: ${s.text}
   /* ── View 1: Landing & Capture ── */
   if (state === "idle" || state === "error") {
     return (
-      <div className="min-h-screen bg-[#09090b] text-[#f4f4f5] flex flex-col justify-between p-6 sm:p-12 max-w-4xl mx-auto">
+      <div className="min-h-screen bg-[#0c0d12] bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(99,102,241,0.18),rgba(255,255,255,0))] text-[#f4f4f5] flex flex-col justify-between p-6 sm:p-12 max-w-4xl mx-auto">
         {/* Top Minimalist Header */}
-        <header className="flex items-center justify-between border-b border-zinc-800/60 pb-5">
+        <header className="flex items-center justify-between border-b border-[#2e303e] pb-5">
           <div className="flex items-center gap-3">
-            <span className="font-mono text-xs uppercase tracking-widest text-zinc-500">
+            <span className="font-mono text-xs uppercase tracking-widest text-indigo-400 font-semibold">
               ShipNotes
             </span>
-            <span className="text-zinc-700">/</span>
-            <span className="text-xs text-zinc-400">Track 4 Submission</span>
+            <span className="text-zinc-600">/</span>
+            <span className="text-xs text-slate-300 font-medium">Track 4 Submission</span>
           </div>
-          <div className="flex items-center gap-4 text-xs font-mono text-zinc-400">
-            <span className="inline-flex items-center gap-1.5 text-zinc-400">
-              <span className="w-1.5 h-1.5 rounded-full bg-indigo-500" />
+          <div className="flex items-center gap-4 text-xs font-mono text-slate-300">
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-indigo-500/15 border border-indigo-500/30 text-indigo-300 font-medium">
+              <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-pulse" />
               WhipScribe API
             </span>
             <a
               href="https://github.com/BamaCharanChhandogi/shipnotes"
               target="_blank"
               rel="noreferrer"
-              className="text-zinc-400 hover:text-white transition-colors"
+              className="text-slate-300 hover:text-white transition-colors"
             >
               GitHub
             </a>
@@ -536,37 +530,37 @@ ${transcript.segments.map((s) => `[${fmt(s.start)}] ${spk(s.speaker)}: ${s.text}
         </header>
 
         {/* Hero Section */}
-        <main className="my-auto py-12 space-y-10">
+        <main className="my-auto py-12 space-y-8">
           <div className="space-y-3">
-            <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-white">
-              Sprint standups to GitHub backlog.
+            <h1 className="text-3xl sm:text-5xl font-bold tracking-tight text-white leading-tight">
+              Sprint standups to <span className="text-indigo-400">GitHub backlog</span>.
             </h1>
-            <p className="text-zinc-400 text-sm sm:text-base max-w-xl leading-relaxed">
+            <p className="text-slate-300 text-sm sm:text-base max-w-xl leading-relaxed font-normal">
               Capture engineering voice notes. WhipScribe diarizes speakers, Gemini extracts actionable commitments, and ShipNotes drafts verified GitHub Issues without manual typing.
             </p>
           </div>
 
           {/* Evaluator 1-Click Test Vector */}
-          <div className="p-4 rounded-xl bg-zinc-900/40 border border-zinc-800/80 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div className="space-y-0.5">
+          <div className="p-5 rounded-2xl bg-[#15161e] border border-[#2b2d3c] shadow-xl shadow-black/30 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="space-y-1">
               <div className="flex items-center gap-2">
-                <span className="text-xs font-mono text-indigo-400 font-medium">vector: sample-standup.wav</span>
-                <span className="text-[10px] font-mono text-zinc-500">2 speakers · 36s</span>
+                <span className="text-xs font-mono text-indigo-400 font-semibold">vector: sample-standup.wav</span>
+                <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-zinc-800 text-slate-300">2 speakers · 36s</span>
               </div>
-              <p className="text-xs text-zinc-400">
+              <p className="text-xs text-slate-300">
                 Auth refactor, Stripe webhook blocker, PostgreSQL migration consensus.
               </p>
             </div>
             <div className="flex items-center gap-2 shrink-0">
               <button
                 onClick={handleInstantPreview}
-                className="px-3.5 py-1.5 text-xs font-medium bg-white text-black hover:bg-zinc-200 rounded-lg transition-colors"
+                className="px-4 py-2 text-xs font-semibold bg-white text-zinc-950 hover:bg-slate-200 rounded-lg transition-all shadow-md"
               >
                 Instant Preview (0s)
               </button>
               <button
                 onClick={handleTrySampleLive}
-                className="px-3 py-1.5 text-xs font-mono text-zinc-300 hover:text-white bg-zinc-800/80 hover:bg-zinc-800 border border-zinc-700/60 rounded-lg transition-colors"
+                className="px-4 py-2 text-xs font-mono text-indigo-300 hover:text-white bg-indigo-600/20 hover:bg-indigo-600/30 border border-indigo-500/40 rounded-lg transition-all"
               >
                 Run Live API
               </button>
@@ -576,35 +570,35 @@ ${transcript.segments.map((s) => `[${fmt(s.start)}] ${spk(s.speaker)}: ${s.text}
           {/* Capture Panel: Live Mic + Dropzone */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {/* Live Mic Panel */}
-            <div className="p-6 rounded-xl bg-zinc-900/20 border border-zinc-800/80 flex flex-col justify-between space-y-4">
+            <div className="p-6 rounded-2xl bg-[#15161e] border border-[#2b2d3c] shadow-lg flex flex-col justify-between space-y-4">
               <div className="space-y-1">
-                <span className="font-mono text-[11px] uppercase tracking-wider text-zinc-500">Input 01</span>
-                <h3 className="text-sm font-medium text-zinc-200">Browser Microphone</h3>
-                <p className="text-xs text-zinc-400">Record a brief standup update directly from your device.</p>
+                <span className="font-mono text-[11px] uppercase tracking-wider text-indigo-400 font-semibold">Input 01</span>
+                <h3 className="text-sm font-semibold text-white">Browser Microphone</h3>
+                <p className="text-xs text-slate-300">Record a brief standup update directly from your device.</p>
               </div>
 
               {!isRecording ? (
                 <button
                   onClick={startRecording}
-                  className="w-full py-2.5 px-4 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-zinc-700 text-xs font-medium text-zinc-200 hover:text-white transition-all flex items-center justify-center gap-2"
+                  className="w-full py-2.5 px-4 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold transition-all shadow-md shadow-indigo-600/25 flex items-center justify-center gap-2"
                 >
-                  <IconMic className="w-3.5 h-3.5 text-indigo-400" />
+                  <IconMic className="w-4 h-4 text-white" />
                   <span>Record Live Audio</span>
                 </button>
               ) : (
                 <div className="space-y-2">
-                  <div className="flex items-center justify-between text-xs font-mono text-zinc-400">
-                    <span className="inline-flex items-center gap-1.5 text-red-400">
+                  <div className="flex items-center justify-between text-xs font-mono text-slate-300">
+                    <span className="inline-flex items-center gap-1.5 text-red-400 font-semibold">
                       <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
                       RECORDING
                     </span>
-                    <span>{fmt(recordSeconds)}</span>
+                    <span className="font-semibold text-white">{fmt(recordSeconds)}</span>
                   </div>
                   <button
                     onClick={stopRecording}
-                    className="w-full py-2 px-4 rounded-lg bg-red-950/60 hover:bg-red-900/60 border border-red-800 text-xs font-medium text-red-200 transition-all flex items-center justify-center gap-2"
+                    className="w-full py-2.5 px-4 rounded-xl bg-red-600 hover:bg-red-500 text-white text-xs font-semibold transition-all shadow-lg shadow-red-600/30 flex items-center justify-center gap-2"
                   >
-                    <IconStop className="w-3.5 h-3.5" />
+                    <IconStop className="w-4 h-4" />
                     <span>Stop and Process</span>
                   </button>
                 </div>
@@ -620,16 +614,16 @@ ${transcript.segments.map((s) => `[${fmt(s.start)}] ${spk(s.speaker)}: ${s.text}
                 const f = e.dataTransfer.files[0];
                 if (f) handleUpload(f);
               }}
-              className="p-6 rounded-xl bg-zinc-900/20 border border-zinc-800/80 hover:border-zinc-700 transition-all cursor-pointer flex flex-col justify-between space-y-4 group"
+              className="p-6 rounded-2xl bg-[#15161e] border border-[#2b2d3c] hover:border-indigo-500/50 shadow-lg transition-all cursor-pointer flex flex-col justify-between space-y-4 group"
             >
               <div className="space-y-1">
-                <span className="font-mono text-[11px] uppercase tracking-wider text-zinc-500">Input 02</span>
-                <h3 className="text-sm font-medium text-zinc-200">Audio File</h3>
-                <p className="text-xs text-zinc-400">Drop an existing MP3, WAV, M4A, or WebM recording.</p>
+                <span className="font-mono text-[11px] uppercase tracking-wider text-slate-400 font-semibold">Input 02</span>
+                <h3 className="text-sm font-semibold text-white">Audio File</h3>
+                <p className="text-xs text-slate-300">Drop an existing MP3, WAV, M4A, or WebM recording.</p>
               </div>
 
-              <div className="py-2.5 px-4 rounded-lg border border-dashed border-zinc-700/80 group-hover:border-zinc-600 text-center text-xs text-zinc-400 group-hover:text-zinc-300 transition-colors flex items-center justify-center gap-2">
-                <IconUpload className="w-3.5 h-3.5 text-zinc-500" />
+              <div className="py-2.5 px-4 rounded-xl border border-dashed border-[#3e4256] group-hover:border-indigo-400 text-center text-xs text-slate-300 group-hover:text-white transition-colors flex items-center justify-center gap-2 bg-[#1c1d27]/60">
+                <IconUpload className="w-4 h-4 text-indigo-400" />
                 <span>Select file from disk</span>
               </div>
               <input
@@ -647,14 +641,14 @@ ${transcript.segments.map((s) => `[${fmt(s.start)}] ${spk(s.speaker)}: ${s.text}
 
           {/* Error Notice */}
           {state === "error" && (
-            <div className="p-4 rounded-lg bg-red-950/30 border border-red-900/60 text-xs text-red-300 flex items-center justify-between">
+            <div className="p-4 rounded-xl bg-red-950/40 border border-red-800 text-xs text-red-200 flex items-center justify-between">
               <span>{error}</span>
               <button
                 onClick={() => {
                   setState("idle");
                   setError("");
                 }}
-                className="underline hover:text-white"
+                className="underline hover:text-white font-semibold"
               >
                 Reset
               </button>
@@ -663,8 +657,8 @@ ${transcript.segments.map((s) => `[${fmt(s.start)}] ${spk(s.speaker)}: ${s.text}
         </main>
 
         {/* Footer */}
-        <footer className="pt-6 border-t border-zinc-800/60 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs text-zinc-500 font-mono">
-          <span>Candidate: Bama Charan Chhandogi</span>
+        <footer className="pt-6 border-t border-[#2e303e] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs text-slate-400 font-mono">
+          <span>Candidate: <strong className="text-white font-normal">Bama Charan Chhandogi</strong></span>
           <span>Engine: WhipScribe GPU Transcription + Gemini Synthesis</span>
         </footer>
       </div>
@@ -681,12 +675,12 @@ ${transcript.segments.map((s) => `[${fmt(s.start)}] ${spk(s.speaker)}: ${s.text}
         : "Extracting action items and engineering commitments...";
 
     return (
-      <div className="min-h-screen bg-[#09090b] text-[#f4f4f5] flex flex-col items-center justify-center p-6">
-        <div className="w-full max-w-sm space-y-4 text-center">
-          <div className="w-8 h-8 rounded-full border-2 border-zinc-700 border-t-indigo-500 animate-spin mx-auto" />
-          <div className="space-y-1">
-            <h3 className="text-sm font-medium text-zinc-200">{stepLabel}</h3>
-            <p className="text-xs font-mono text-zinc-500">{fileName || `job: ${jobId.slice(0, 12)}`}</p>
+      <div className="min-h-screen bg-[#0c0d12] text-[#f4f4f5] flex flex-col items-center justify-center p-6">
+        <div className="w-full max-w-sm space-y-4 text-center p-8 rounded-2xl bg-[#15161e] border border-[#2b2d3c] shadow-2xl">
+          <div className="w-9 h-9 rounded-full border-2 border-zinc-700 border-t-indigo-500 animate-spin mx-auto" />
+          <div className="space-y-1.5">
+            <h3 className="text-sm font-semibold text-white">{stepLabel}</h3>
+            <p className="text-xs font-mono text-slate-400">{fileName || `job: ${jobId.slice(0, 12)}`}</p>
           </div>
         </div>
       </div>
@@ -699,24 +693,24 @@ ${transcript.segments.map((s) => `[${fmt(s.start)}] ${spk(s.speaker)}: ${s.text}
     const slackMsg = generateSlackDigest();
 
     return (
-      <div className="min-h-screen bg-[#09090b] text-[#f4f4f5] pb-24">
+      <div className="min-h-screen bg-[#0c0d12] bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(99,102,241,0.12),rgba(255,255,255,0))] text-[#f4f4f5] pb-24">
         {/* Navigation Sticky Topbar */}
-        <header className="sticky top-0 z-40 bg-[#09090b]/90 backdrop-blur border-b border-zinc-800/80 px-6 py-3.5">
+        <header className="sticky top-0 z-40 bg-[#0c0d12]/95 backdrop-blur border-b border-[#2e303e] px-6 py-3.5">
           <div className="max-w-5xl mx-auto flex items-center justify-between gap-4">
             <div className="flex items-center gap-3">
-              <span className="font-mono text-xs uppercase tracking-wider text-zinc-500">
+              <span className="font-mono text-xs uppercase tracking-wider text-indigo-400 font-semibold">
                 ShipNotes
               </span>
-              <span className="text-zinc-700">/</span>
-              <span className="text-xs font-medium text-zinc-300 truncate max-w-xs">
+              <span className="text-zinc-600">/</span>
+              <span className="text-xs font-medium text-slate-200 truncate max-w-xs">
                 {analysis.title}
               </span>
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2.5">
               <button
                 onClick={downloadMarkdownReport}
-                className="px-3 py-1.5 text-xs font-mono text-zinc-300 hover:text-white bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 rounded-lg transition-colors flex items-center gap-1.5"
+                className="px-3.5 py-1.5 text-xs font-mono text-slate-200 hover:text-white bg-[#1c1d27] hover:bg-[#252634] border border-[#2e303e] rounded-lg transition-colors flex items-center gap-1.5 shadow-sm"
               >
                 <IconDownload />
                 <span>Export .md</span>
@@ -727,7 +721,7 @@ ${transcript.segments.map((s) => `[${fmt(s.start)}] ${spk(s.speaker)}: ${s.text}
                   setTranscript(null);
                   setAnalysis(null);
                 }}
-                className="px-3 py-1.5 text-xs font-mono text-zinc-300 hover:text-white bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 rounded-lg transition-colors"
+                className="px-3.5 py-1.5 text-xs font-mono text-indigo-300 hover:text-white bg-indigo-600/20 hover:bg-indigo-600/30 border border-indigo-500/40 rounded-lg transition-colors"
               >
                 New Session
               </button>
@@ -736,56 +730,62 @@ ${transcript.segments.map((s) => `[${fmt(s.start)}] ${spk(s.speaker)}: ${s.text}
         </header>
 
         <main className="max-w-5xl mx-auto px-6 pt-8 space-y-8">
-          {/* Executive Standup Header */}
-          <div className="space-y-4">
-            <div className="space-y-1.5">
-              <div className="flex items-center gap-3">
-                <span className="px-2 py-0.5 rounded text-[11px] font-mono bg-zinc-900 border border-zinc-800 text-zinc-400">
+          {/* Executive Standup Briefing Card */}
+          <div className="p-6 rounded-2xl bg-[#15161e] border border-[#2b2d3c] shadow-xl shadow-black/30 space-y-5">
+            <div className="space-y-2">
+              <div className="flex flex-wrap items-center gap-2.5">
+                <span className="px-2.5 py-0.5 rounded-full text-xs font-mono bg-indigo-500/15 border border-indigo-500/30 text-indigo-300 font-medium">
                   {fmt(transcript.duration)} duration
                 </span>
-                <span className="px-2 py-0.5 rounded text-[11px] font-mono bg-zinc-900 border border-zinc-800 text-zinc-400">
+                <span className="px-2.5 py-0.5 rounded-full text-xs font-mono bg-zinc-800/80 border border-zinc-700/60 text-slate-300">
                   {Object.keys(analysis.speakerMap).length} participants
                 </span>
               </div>
-              <h1 className="text-2xl font-semibold tracking-tight text-white">{analysis.title}</h1>
-              <p className="text-zinc-400 text-sm leading-relaxed max-w-3xl">{analysis.summary}</p>
+              <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-white">{analysis.title}</h1>
+              <p className="text-slate-300 text-sm leading-relaxed max-w-3xl font-normal">{analysis.summary}</p>
             </div>
 
-            {/* Speaker Tagging */}
-            <div className="flex flex-wrap items-center gap-2 pt-2">
-              <span className="text-[11px] font-mono uppercase tracking-wider text-zinc-500 mr-2">
-                Speakers:
-              </span>
-              {Object.entries(analysis.speakerMap).map(([id, stats]) => (
-                <div
-                  key={id}
-                  className="inline-flex items-center gap-2 px-2.5 py-1 rounded-md bg-zinc-900/60 border border-zinc-800 text-xs"
-                >
-                  <span className="w-1.5 h-1.5 rounded-full bg-indigo-500" />
-                  <input
-                    className="bg-transparent border-b border-transparent hover:border-zinc-700 focus:border-indigo-500 text-zinc-200 focus:outline-none w-24 text-xs"
-                    value={speakerNames[id] || ""}
-                    placeholder={id}
-                    onChange={(e) =>
-                      setSpeakerNames((prev) => ({ ...prev, [id]: e.target.value }))
-                    }
-                  />
-                  <span className="text-zinc-500 font-mono text-[10px]">{fmt(stats.totalTime)}</span>
+            {/* Bottom Row: Compact Audio Player + Speakers */}
+            <div className="pt-3 border-t border-[#2e303e] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              {/* Speakers List */}
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="text-[11px] font-mono uppercase tracking-wider text-slate-400 font-semibold mr-1">
+                  Speakers:
+                </span>
+                {Object.entries(analysis.speakerMap).map(([id, stats]) => (
+                  <div
+                    key={id}
+                    className="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-[#1c1d27] border border-[#2e303e] text-xs"
+                  >
+                    <span className="w-2 h-2 rounded-full bg-indigo-400" />
+                    <input
+                      className="bg-transparent border-b border-transparent hover:border-zinc-500 focus:border-indigo-400 text-white font-medium focus:outline-none w-24 text-xs"
+                      value={speakerNames[id] || (id === "Unknown" ? "Bama (Dev)" : id)}
+                      placeholder={id}
+                      onChange={(e) =>
+                        setSpeakerNames((prev) => ({ ...prev, [id]: e.target.value }))
+                      }
+                    />
+                    <span className="text-slate-400 font-mono text-[11px]">({fmt(stats.totalTime)})</span>
+                  </div>
+                ))}
+              </div>
+
+              {/* Compact Proportional Audio Player (Not stretched) */}
+              {audioUrl && (
+                <div className="flex items-center gap-2.5 p-1.5 px-3 rounded-xl bg-[#1c1d27] border border-[#2e303e] max-w-xs shrink-0">
+                  <span className="text-xs font-mono text-indigo-400 font-medium shrink-0 flex items-center gap-1">
+                    <IconPlay className="w-3 h-3 text-indigo-400" />
+                    Audio
+                  </span>
+                  <audio ref={audioRef} src={audioUrl} controls className="h-7 w-48" />
                 </div>
-              ))}
+              )}
             </div>
           </div>
 
-          {/* Integrated Sleek Audio Bar */}
-          {audioUrl && (
-            <div className="p-3.5 rounded-xl bg-zinc-900/40 border border-zinc-800/80 flex items-center gap-3">
-              <span className="font-mono text-xs text-zinc-500">Audio playback:</span>
-              <audio ref={audioRef} src={audioUrl} controls className="w-full h-8 rounded" />
-            </div>
-          )}
-
-          {/* Navigation Tabs */}
-          <div className="flex border-b border-zinc-800 gap-6">
+          {/* Navigation Tabs (Bright Pills) */}
+          <div className="flex flex-wrap gap-2 border-b border-[#2e303e] pb-3">
             {(
               [
                 { id: "actions", label: `Action Items (${analysis.actionItems.length})` },
@@ -797,39 +797,39 @@ ${transcript.segments.map((s) => `[${fmt(s.start)}] ${spk(s.speaker)}: ${s.text}
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`pb-3 text-xs font-medium transition-colors relative ${
-                  activeTab === tab.id ? "text-white" : "text-zinc-400 hover:text-zinc-200"
+                className={`px-4 py-2 rounded-xl text-xs font-semibold transition-all ${
+                  activeTab === tab.id
+                    ? "bg-indigo-600 text-white shadow-md shadow-indigo-600/30"
+                    : "text-slate-400 hover:text-white hover:bg-[#1c1d27]"
                 }`}
               >
                 {tab.label}
-                {activeTab === tab.id && (
-                  <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-indigo-500" />
-                )}
               </button>
             ))}
           </div>
 
           {/* ── TAB 1: Action Items & Engineering Highlights ── */}
           {activeTab === "actions" && (
-            <div className="space-y-8">
+            <div className="space-y-6">
               {/* Shipped Items */}
               {analysis.shipped.length > 0 && (
-                <div className="space-y-3">
-                  <h3 className="font-mono text-xs uppercase tracking-wider text-zinc-500">
+                <div className="space-y-2.5">
+                  <h3 className="font-mono text-xs uppercase tracking-wider text-emerald-400 font-semibold flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
                     Shipped Achievements
                   </h3>
-                  <div className="divide-y divide-zinc-800/60 border border-zinc-800/80 rounded-xl overflow-hidden bg-zinc-900/20">
+                  <div className="divide-y divide-[#2e303e] border border-[#2b2d3c] rounded-2xl overflow-hidden bg-[#15161e] shadow-lg">
                     {analysis.shipped.map((item, i) => (
                       <div key={i} className="p-4 flex items-start justify-between gap-4">
                         <div className="space-y-1">
-                          <p className="text-sm font-medium text-zinc-200">{item.description}</p>
-                          <span className="text-xs text-zinc-500">
-                            Owner: <span className="text-zinc-300">{spk(item.speaker)}</span>
+                          <p className="text-sm font-medium text-white">{item.description}</p>
+                          <span className="text-xs text-slate-300">
+                            Owner: <strong className="text-white font-medium">{spk(item.speaker)}</strong>
                           </span>
                         </div>
                         <button
                           onClick={() => seekTo(parseTs(item.timestamp))}
-                          className="shrink-0 px-2 py-1 rounded bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-[11px] font-mono text-zinc-400 hover:text-white transition-colors flex items-center gap-1"
+                          className="shrink-0 px-2.5 py-1 rounded-lg bg-[#1c1d27] hover:bg-[#252634] border border-[#2e303e] text-xs font-mono text-emerald-300 hover:text-white transition-colors flex items-center gap-1.5"
                         >
                           <IconPlay className="w-2.5 h-2.5" />
                           <span>{item.timestamp}</span>
@@ -841,33 +841,40 @@ ${transcript.segments.map((s) => `[${fmt(s.start)}] ${spk(s.speaker)}: ${s.text}
               )}
 
               {/* Action Items */}
-              <div className="space-y-3">
-                <h3 className="font-mono text-xs uppercase tracking-wider text-zinc-500">
+              <div className="space-y-2.5">
+                <h3 className="font-mono text-xs uppercase tracking-wider text-indigo-400 font-semibold flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-indigo-400" />
                   Committed Action Items
                 </h3>
-                <div className="divide-y divide-zinc-800/60 border border-zinc-800/80 rounded-xl overflow-hidden bg-zinc-900/20">
+                <div className="divide-y divide-[#2e303e] border border-[#2b2d3c] rounded-2xl overflow-hidden bg-[#15161e] shadow-lg">
                   {analysis.actionItems.map((item, i) => (
                     <div key={i} className="p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                      <div className="space-y-1">
-                        <div className="flex items-center gap-2">
-                          <span className="text-xs font-mono text-zinc-500">#{i + 1}</span>
-                          <span className="text-sm font-medium text-zinc-200">{item.task}</span>
+                      <div className="space-y-1.5">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <span className="text-xs font-mono text-indigo-400 font-bold">#{i + 1}</span>
+                          <span className="text-sm font-semibold text-white">{item.task}</span>
                         </div>
-                        <div className="flex items-center gap-3 text-xs text-zinc-400">
+                        <div className="flex items-center gap-3 text-xs text-slate-300">
                           <span>
-                            Assignee: <strong className="text-zinc-300 font-normal">@{spk(item.speaker)}</strong>
+                            Assignee: <strong className="text-white font-medium">@{spk(item.speaker)}</strong>
                           </span>
                           <span>·</span>
-                          <span>Due: {item.deadline}</span>
+                          <span>Due: <strong className="text-white font-medium">{item.deadline}</strong></span>
                           <span>·</span>
-                          <span className="font-mono text-[11px] text-zinc-500">priority: {item.priority}</span>
+                          <span className={`font-mono text-[10px] uppercase font-bold px-2 py-0.5 rounded ${
+                            item.priority === "high"
+                              ? "bg-red-500/20 text-red-300 border border-red-500/30"
+                              : "bg-indigo-500/20 text-indigo-300 border border-indigo-500/30"
+                          }`}>
+                            {item.priority}
+                          </span>
                         </div>
                       </div>
 
                       <div className="flex items-center gap-2 shrink-0">
                         <button
                           onClick={() => seekTo(parseTs(item.timestamp))}
-                          className="px-2 py-1 rounded bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-[11px] font-mono text-zinc-400 hover:text-white transition-colors flex items-center gap-1"
+                          className="px-2.5 py-1 rounded-lg bg-[#1c1d27] hover:bg-[#252634] border border-[#2e303e] text-xs font-mono text-indigo-300 hover:text-white transition-colors flex items-center gap-1.5"
                         >
                           <IconPlay className="w-2.5 h-2.5" />
                           <span>{item.timestamp}</span>
@@ -876,7 +883,7 @@ ${transcript.segments.map((s) => `[${fmt(s.start)}] ${spk(s.speaker)}: ${s.text}
                           href={ghIssues[i]?.prefillUrl}
                           target="_blank"
                           rel="noreferrer"
-                          className="px-2.5 py-1 text-xs font-mono text-zinc-300 hover:text-white bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 rounded transition-colors flex items-center gap-1"
+                          className="px-3 py-1 text-xs font-mono font-medium text-white bg-indigo-600 hover:bg-indigo-500 rounded-lg transition-colors flex items-center gap-1 shadow-sm"
                         >
                           <span>Open Issue</span>
                           <IconExternal />
@@ -889,24 +896,27 @@ ${transcript.segments.map((s) => `[${fmt(s.start)}] ${spk(s.speaker)}: ${s.text}
 
               {/* Blockers */}
               {analysis.blockers.length > 0 && (
-                <div className="space-y-3">
-                  <h3 className="font-mono text-xs uppercase tracking-wider text-zinc-500">
+                <div className="space-y-2.5">
+                  <h3 className="font-mono text-xs uppercase tracking-wider text-red-400 font-semibold flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-red-400" />
                     Identified Blockers
                   </h3>
-                  <div className="divide-y divide-zinc-800/60 border border-zinc-800/80 rounded-xl overflow-hidden bg-zinc-900/20">
+                  <div className="divide-y divide-[#2e303e] border border-[#2b2d3c] rounded-2xl overflow-hidden bg-[#15161e] shadow-lg">
                     {analysis.blockers.map((b, i) => (
                       <div key={i} className="p-4 flex items-start justify-between gap-4">
                         <div className="space-y-1">
-                          <p className="text-sm font-medium text-zinc-200">{b.description}</p>
-                          <div className="flex items-center gap-2 text-xs text-zinc-400">
-                            <span>Blocked: @{spk(b.owner)}</span>
+                          <p className="text-sm font-semibold text-red-200">{b.description}</p>
+                          <div className="flex items-center gap-2 text-xs text-slate-300">
+                            <span>Blocked: <strong className="text-white">@{spk(b.owner)}</strong></span>
                             <span>·</span>
-                            <span className="font-mono text-[10px] uppercase text-zinc-500">{b.severity}</span>
+                            <span className="font-mono text-[10px] uppercase font-bold text-red-300 bg-red-500/20 px-2 py-0.5 rounded border border-red-500/30">
+                              {b.severity}
+                            </span>
                           </div>
                         </div>
                         <button
                           onClick={() => seekTo(parseTs(b.timestamp))}
-                          className="shrink-0 px-2 py-1 rounded bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-[11px] font-mono text-zinc-400 hover:text-white transition-colors flex items-center gap-1"
+                          className="shrink-0 px-2.5 py-1 rounded-lg bg-[#1c1d27] hover:bg-[#252634] border border-[#2e303e] text-xs font-mono text-red-300 hover:text-white transition-colors flex items-center gap-1.5"
                         >
                           <IconPlay className="w-2.5 h-2.5" />
                           <span>{b.timestamp}</span>
@@ -919,22 +929,23 @@ ${transcript.segments.map((s) => `[${fmt(s.start)}] ${spk(s.speaker)}: ${s.text}
 
               {/* Decisions */}
               {analysis.decisions.length > 0 && (
-                <div className="space-y-3">
-                  <h3 className="font-mono text-xs uppercase tracking-wider text-zinc-500">
+                <div className="space-y-2.5">
+                  <h3 className="font-mono text-xs uppercase tracking-wider text-amber-400 font-semibold flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
                     Consensus Decisions
                   </h3>
-                  <div className="divide-y divide-zinc-800/60 border border-zinc-800/80 rounded-xl overflow-hidden bg-zinc-900/20">
+                  <div className="divide-y divide-[#2e303e] border border-[#2b2d3c] rounded-2xl overflow-hidden bg-[#15161e] shadow-lg">
                     {analysis.decisions.map((d, i) => (
                       <div key={i} className="p-4 flex items-start justify-between gap-4">
                         <div className="space-y-1">
-                          <p className="text-sm font-medium text-zinc-200">{d.summary}</p>
-                          <span className="text-xs text-zinc-500">
-                            Participants: {d.speakers.map(spk).join(", ")}
+                          <p className="text-sm font-medium text-white">{d.summary}</p>
+                          <span className="text-xs text-slate-300">
+                            Agreed by: <strong className="text-white">{d.speakers.map(spk).join(", ")}</strong>
                           </span>
                         </div>
                         <button
                           onClick={() => seekTo(parseTs(d.timestamp))}
-                          className="shrink-0 px-2 py-1 rounded bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-[11px] font-mono text-zinc-400 hover:text-white transition-colors flex items-center gap-1"
+                          className="shrink-0 px-2.5 py-1 rounded-lg bg-[#1c1d27] hover:bg-[#252634] border border-[#2e303e] text-xs font-mono text-amber-300 hover:text-white transition-colors flex items-center gap-1.5"
                         >
                           <IconPlay className="w-2.5 h-2.5" />
                           <span>{d.timestamp}</span>
@@ -950,14 +961,14 @@ ${transcript.segments.map((s) => `[${fmt(s.start)}] ${spk(s.speaker)}: ${s.text}
           {/* ── TAB 2: GitHub Issues ── */}
           {activeTab === "github" && (
             <div className="space-y-6">
-              <div className="p-4 rounded-xl bg-zinc-900/40 border border-zinc-800/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div className="p-4 rounded-xl bg-[#15161e] border border-[#2b2d3c] flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-md">
                 <div className="flex items-center gap-2">
-                  <span className="text-xs font-mono text-zinc-500">target_repo:</span>
+                  <span className="text-xs font-mono text-slate-400 font-medium">target_repo:</span>
                   <input
                     type="text"
                     value={targetRepo}
                     onChange={(e) => setTargetRepo(e.target.value)}
-                    className="px-2.5 py-1 bg-zinc-950 border border-zinc-800 rounded text-xs font-mono text-white focus:outline-none focus:border-zinc-600 w-56"
+                    className="px-3 py-1.5 bg-[#1c1d27] border border-[#2e303e] rounded-lg text-xs font-mono text-white focus:outline-none focus:border-indigo-400 w-60"
                   />
                 </div>
                 <button
@@ -967,25 +978,25 @@ ${transcript.segments.map((s) => `[${fmt(s.start)}] ${spk(s.speaker)}: ${s.text}
                       .join("\n\n---\n\n");
                     copy(md, "all-gh");
                   }}
-                  className="px-3 py-1.5 text-xs font-mono text-zinc-300 hover:text-white bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 rounded transition-colors flex items-center gap-1.5"
+                  className="px-3.5 py-1.5 text-xs font-mono font-medium text-white bg-indigo-600 hover:bg-indigo-500 rounded-lg transition-colors flex items-center gap-1.5 shadow-md shadow-indigo-600/20"
                 >
                   {copiedId === "all-gh" ? <IconCheck /> : <IconCopy />}
-                  <span>{copiedId === "all-gh" ? "Copied" : "Copy Markdown"}</span>
+                  <span>{copiedId === "all-gh" ? "Copied" : "Copy All Issues"}</span>
                 </button>
               </div>
 
               <div className="space-y-4">
                 {ghIssues.map((issue) => (
-                  <div key={issue.id} className="p-5 rounded-xl bg-zinc-900/20 border border-zinc-800/80 space-y-3">
+                  <div key={issue.id} className="p-5 rounded-2xl bg-[#15161e] border border-[#2b2d3c] space-y-3.5 shadow-lg">
                     <div className="flex items-start justify-between gap-3">
                       <div className="space-y-1">
-                        <span className="text-xs font-mono text-zinc-500">#{issue.id + 1}</span>
-                        <h4 className="font-medium text-zinc-200 text-sm">{issue.title}</h4>
+                        <span className="text-xs font-mono text-indigo-400 font-bold">#{issue.id + 1}</span>
+                        <h4 className="font-semibold text-white text-base">{issue.title}</h4>
                       </div>
                       <div className="flex items-center gap-2 shrink-0">
                         <button
                           onClick={() => copy(issue.body, `gh-${issue.id}`)}
-                          className="px-2.5 py-1 text-xs font-mono text-zinc-400 hover:text-white bg-zinc-900 border border-zinc-800 rounded transition-colors"
+                          className="px-3 py-1.5 text-xs font-mono text-slate-300 hover:text-white bg-[#1c1d27] border border-[#2e303e] rounded-lg transition-colors"
                         >
                           {copiedId === `gh-${issue.id}` ? "Copied" : "Copy"}
                         </button>
@@ -993,7 +1004,7 @@ ${transcript.segments.map((s) => `[${fmt(s.start)}] ${spk(s.speaker)}: ${s.text}
                           href={issue.prefillUrl}
                           target="_blank"
                           rel="noreferrer"
-                          className="px-2.5 py-1 text-xs font-mono text-white bg-zinc-800 hover:bg-zinc-700 rounded transition-colors flex items-center gap-1"
+                          className="px-3.5 py-1.5 text-xs font-mono font-medium text-white bg-indigo-600 hover:bg-indigo-500 rounded-lg transition-colors flex items-center gap-1.5 shadow-sm"
                         >
                           <span>Open Issue</span>
                           <IconExternal />
@@ -1001,7 +1012,7 @@ ${transcript.segments.map((s) => `[${fmt(s.start)}] ${spk(s.speaker)}: ${s.text}
                       </div>
                     </div>
 
-                    <pre className="text-xs text-zinc-400 font-mono bg-zinc-950/80 p-3.5 rounded-lg border border-zinc-800/60 overflow-x-auto whitespace-pre-wrap leading-relaxed">
+                    <pre className="text-xs text-slate-300 font-mono bg-[#0c0d12] p-4 rounded-xl border border-[#2b2d3c] overflow-x-auto whitespace-pre-wrap leading-relaxed">
                       {issue.body}
                     </pre>
                   </div>
@@ -1014,41 +1025,71 @@ ${transcript.segments.map((s) => `[${fmt(s.start)}] ${spk(s.speaker)}: ${s.text}
           {activeTab === "slack" && (
             <div className="space-y-4">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-mono text-zinc-500">
-                  mrkdwn payload formatted for Slack / Discord / Linear:
+                <span className="text-xs font-mono text-slate-300 font-medium">
+                  Slack / Discord formatted digest:
                 </span>
                 <button
                   onClick={() => copy(slackMsg, "slack-digest")}
-                  className="px-3 py-1.5 text-xs font-mono text-zinc-200 hover:text-white bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 rounded transition-colors flex items-center gap-1.5"
+                  className="px-4 py-2 text-xs font-mono font-semibold text-white bg-indigo-600 hover:bg-indigo-500 rounded-lg transition-colors flex items-center gap-1.5 shadow-md shadow-indigo-600/25"
                 >
                   {copiedId === "slack-digest" ? <IconCheck /> : <IconCopy />}
-                  <span>{copiedId === "slack-digest" ? "Copied" : "Copy Text"}</span>
+                  <span>{copiedId === "slack-digest" ? "Copied to Clipboard" : "Copy Digest"}</span>
                 </button>
               </div>
 
-              <div className="rounded-xl bg-zinc-950 border border-zinc-800/80 p-6 font-mono text-xs leading-relaxed text-zinc-300 whitespace-pre-wrap">
-                {slackMsg}
+              {/* Styled Digest Card */}
+              <div className="rounded-2xl bg-[#15161e] border border-[#2b2d3c] p-6 shadow-xl space-y-4">
+                <div className="flex items-center gap-3 pb-3 border-b border-[#2e303e]">
+                  <div className="w-8 h-8 rounded-lg bg-indigo-600 text-white font-bold flex items-center justify-center text-xs">
+                    SN
+                  </div>
+                  <div>
+                    <span className="font-semibold text-sm text-white">ShipNotes Digest</span>
+                    <span className="text-[10px] font-mono text-slate-400 ml-2">Standup Intelligence</span>
+                  </div>
+                </div>
+
+                <div className="font-sans text-sm text-slate-200 leading-relaxed whitespace-pre-wrap space-y-2">
+                  {slackMsg.split("\n").map((line, i) => {
+                    const boldParts = line.split(/\*([^*]+)\*/g);
+                    return (
+                      <div key={i} className={line === "" ? "h-2" : ""}>
+                        {boldParts.map((part, j) =>
+                          j % 2 === 1 ? (
+                            <strong key={j} className="text-white font-semibold">
+                              {part}
+                            </strong>
+                          ) : (
+                            <span key={j} className="text-slate-300">
+                              {part}
+                            </span>
+                          )
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
             </div>
           )}
 
           {/* ── TAB 4: Diarized Dialogue ── */}
           {activeTab === "transcript" && (
-            <div className="divide-y divide-zinc-800/60 border border-zinc-800/80 rounded-xl overflow-hidden bg-zinc-900/10">
+            <div className="divide-y divide-[#2e303e] border border-[#2b2d3c] rounded-2xl overflow-hidden bg-[#15161e] shadow-lg">
               {transcript.segments.map((seg, i) => (
                 <div
                   key={i}
                   onClick={() => seekTo(seg.start)}
-                  className="p-4 hover:bg-zinc-900/30 transition-colors cursor-pointer flex items-start gap-4"
+                  className="p-4 hover:bg-[#1c1d27]/70 transition-colors cursor-pointer flex items-start gap-4"
                 >
-                  <span className="font-mono text-xs text-zinc-500 shrink-0 w-16">
+                  <span className="font-mono text-xs text-indigo-400 font-semibold shrink-0 w-16">
                     {fmt(seg.start)}
                   </span>
                   <div className="space-y-1">
-                    <span className="text-xs font-medium text-zinc-300">
+                    <span className="text-xs font-semibold text-white">
                       {spk(seg.speaker)}
                     </span>
-                    <p className="text-sm text-zinc-400 leading-relaxed">{seg.text}</p>
+                    <p className="text-sm text-slate-300 leading-relaxed">{seg.text}</p>
                   </div>
                 </div>
               ))}

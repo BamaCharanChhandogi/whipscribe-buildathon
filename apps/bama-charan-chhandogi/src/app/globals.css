@@ -3,14 +3,14 @@
 @tailwind utilities;
 
 :root {
-  --bg: #09090b;
-  --surface: #111113;
-  --surface-raised: #18181b;
-  --border: #27272a;
-  --border-subtle: #1f1f23;
-  --text-primary: #f4f4f5;
-  --text-secondary: #a1a1aa;
-  --text-muted: #71717a;
+  --bg: #0c0d12;
+  --surface: #15161e;
+  --surface-raised: #1c1d27;
+  --border: #2e303e;
+  --border-subtle: #232530;
+  --text-primary: #ffffff;
+  --text-secondary: #cbd5e1;
+  --text-muted: #94a3b8;
   --accent: #6366f1;
 }
 
@@ -20,7 +20,7 @@
 
 body {
   margin: 0;
-  background: var(--bg);
+  background-color: var(--bg);
   color: var(--text-primary);
   font-family: var(--font-sans), system-ui, -apple-system, sans-serif;
   letter-spacing: -0.011em;
@@ -28,7 +28,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Custom crisp scrollbar */
+/* Custom sleek scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -37,19 +37,9 @@ body {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #27272a;
+  background: #333645;
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #3f3f46;
-}
-
-/* Subtle pulse for processing */
-@keyframes subtle-pulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.6; transform: scale(0.97); }
-}
-
-.subtle-pulse {
-  animation: subtle-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  background: #474b61;
 }
