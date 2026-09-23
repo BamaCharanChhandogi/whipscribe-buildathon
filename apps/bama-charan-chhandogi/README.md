@@ -4,9 +4,10 @@
 
 Record a 5-minute standup. ShipNotes transcribes it with speaker diarization via WhipScribe API, extracts action items / decisions / blockers / shipped updates via Gemini AI, and outputs them as ready-to-create GitHub Issues and a formatted Slack digest.
 
-## Live Demo
+## Live Demo & Walkthrough Video
 
-🔗 **[https://shipnotes-inky.vercel.app](https://shipnotes-inky.vercel.app)** *(Zero install, running live on Vercel)*
+- 🔗 **Live App**: **[https://shipnotes-inky.vercel.app](https://shipnotes-inky.vercel.app)** *(Zero install, running live on Vercel)*
+- 🎥 **2-Minute Walkthrough Video**: **[Watch on Loom](https://www.loom.com/share/89742aa965f54ed783a0c8f48ad95a24)**
 
 ## The Problem
 
