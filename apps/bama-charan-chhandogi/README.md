@@ -1,61 +1,95 @@
-# Bama Charan Chhandogi
+# ShipNotes
 
-Software Developer at [ClipWise AI](https://clipwise.ai) (full-time, production).
-React, Node.js, Next.js, TypeScript. 1.6 years shipping.
+**Sprint standup recordings → GitHub Issues + Slack digests, powered by WhipScribe.**
 
-## Where to find me
+Record a 5-minute standup. ShipNotes transcribes it with speaker diarization via WhipScribe API, extracts action items / decisions / blockers / shipped updates via Gemini AI, and outputs them as ready-to-create GitHub Issues and a formatted Slack digest.
 
-| | |
-|---|---|
-| LinkedIn | [linkedin.com/in/bamacharanchhandogi](https://www.linkedin.com/in/bamacharanchhandogi/) |
-| GitHub | [github.com/BamaCharanChhandogi](https://github.com/BamaCharanChhandogi) |
-| Portfolio | [bamacharan.com](https://bamacharan.com) |
-| X | [@BamacharanCh](https://x.com/BamacharanCh) |
+## Live Demo
 
-## What I have built
+🔗 **[shipnotes.vercel.app](https://shipnotes.vercel.app)** _(link active after deployment)_
 
-### Things with real users
+## The Problem
 
-| What | Stack | Users | Link |
-|------|-------|-------|------|
-| 3 VS Code extensions (JavaSnippet, Auto Reload Backend, Mongoose-to-Postman Converter) | TypeScript, VS Code API, Google Generative AI | 3,000+ installs | [marketplace](https://marketplace.visualstudio.com/publishers/BamaCharanChhandogi) |
-| 2 npm packages (use-react-summary, use-react-GFG) | React, Node.js, Google Generative AI | 300+ downloads/month | [npm](https://www.npmjs.com/~bamacharan) |
-| GitFinder | React, Firebase, GitHub API, OAuth | 26 stars, 35 forks, 20+ contributors | [gitfinder.bamacharan.com](https://gitfinder.bamacharan.com) |
-| READMEasy | React, Gemini API | 18 stars, 31 forks | [readm-easy.vercel.app](https://readm-easy.vercel.app) |
-| Engram | Next.js 15, Drizzle ORM, Neon Postgres, Gemini AI | Active | [engram.bamacharan.com](http://engram.bamacharan.com/) |
+Engineering teams record standups every day. Nobody processes them. Action items get lost, decisions go undocumented, blockers stay invisible until standup the next day.
 
-### Things I own end to end
+Current tools push everything into Airtable or spreadsheets — tools developers don't actually use day-to-day. ShipNotes sends output where developers already live: **GitHub Issues** and **Slack**.
 
-| What | Stack | What I did |
-|------|-------|------------|
-| [Engram](http://engram.bamacharan.com/) ([GitHub](https://github.com/BamaCharanChhandogi/Engram)) | Next.js 15, Drizzle ORM, Neon Postgres, Gemini 3.6 Flash | Built from scratch. Intercepts AI coding session diffs from Cursor and Claude Code, generates daily active-recall challenges so developers retain comprehension of AI-generated code. Sole author, every commit mine. |
-| [Money-Mentor](https://moneymentor.bamacharan.com) | MERN, Redis, JWT, AI categorisation | Full finance platform with expense tracking, budgeting, bank integration. JWT auth, RBAC, data encryption. Sole author. |
-| ClipWise AI (current job) | React, Node.js, production | Full-time software developer. Shipping features to real customers in production. |
+## How It Works
 
-## Open-source leadership
+```
+Standup Recording (.mp3/.wav/.m4a)
+        │
+        ▼
+┌──────────────────────────┐
+│   WhipScribe API          │
+│   diarize + word_timestamps│
+│   POST /api/v1/transcribe │
+│   Poll → GET /jobs/{id}   │
+│   Fetch → /result?json    │
+└──────────┬───────────────┘
+           │
+           ▼
+┌──────────────────────────┐
+│   Gemini 2.0 Flash        │
+│   Structured extraction:  │
+│   • Action items + owner  │
+│   • Decisions + evidence  │
+│   • Blockers + severity   │
+│   • Shipped updates       │
+└──────────┬───────────────┘
+           │
+     ┌─────┼──────┐
+     ▼     ▼      ▼
+  GitHub  Slack  Dashboard
+  Issues  Digest (transcript
+                  + audio sync)
+```
 
-| Role | Where | What I did |
-|------|-------|------------|
-| Maintainer | [TheAlgorithms](https://github.com/TheAlgorithms) (143K+ stars) | Reviewed and merged contributions across one of GitHub's largest repositories. Code reviews, enforced quality standards, coordinated with 50+ global developers. Sep 2023 – present. |
-| Project Admin & Mentor | [GirlScript Summer of Code](https://gssoc.girlscript.tech) | Led the Diabetes Prediction project. Guided 30+ contributors, managed 60+ merged PRs, boosted ML model accuracy by 15%, enforced CI/CD pipelines. May – Aug 2024. |
-| Technical Head | Open Source Chandigarh | Directed 5+ initiatives with 200+ community contributions. Architected roadmaps for 3 major projects. Sep 2023 – Aug 2024. |
+## What's Built
 
-## Wins
+- **WhipScribe API integration**: File upload with diarization and word-level timestamps
+- **Job polling**: 3-second interval with 10-minute timeout, handles locked/failed states
+- **Gemini AI extraction**: Structured JSON output (action items, decisions, blockers, shipped)
+- **Interactive transcript**: Speaker-colored segments with click-to-seek audio sync
+- **Speaker rename**: Map `Speaker 0` → real team member names
+- **GitHub Issues output**: Pre-formatted issues with priority labels, assignees, and timestamp evidence
+- **Slack digest output**: Copy-ready Slack message with emoji markers and ownership
+- **Audio player**: Synchronized playback with timestamp-linked seeking
+- **4-tab dashboard**: Actions, Transcript, GitHub Issues, Slack Digest
 
-- Best Full Stack Project Award — Chitkara University (2023)
-- Top 50 Campus Ambassador — GirlScript Summer of Code (2024)
-- 10th among 2,000+ participants — Innogeeks Open Source Program
-- 3rd in university — Hacktoberfest contributions (2023)
+## What's Not Built (Honest)
 
-## What I have not done
+- No OAuth for GitHub/Slack (issues are copy-ready, not auto-pushed)
+- No persistent storage (stateless, process one standup at a time)
+- No batch processing
+- No webhook listener for automated triggering
 
-- No app in the App Store or Play Store.
-- No Tauri or Electron experience (I would learn for Track 2).
-- No prior audio/transcription product work.
+## Run Locally
 
-## What I am doing here
+```bash
+cd apps/bama-charan-chhandogi
+cp .env.example .env.local
+# Fill in WHIPSCRIBE_API_KEY and GEMINI_API_KEY
+npm install
+npm run dev
+```
 
-- Track 0: this pull request.
-- Track 1 (UI bugs): filed three deep mobile findings (#109, #110, #111) covering action dock collision, reactive state desync on save, in-browser WebM player duration corruption, and layout misalignments, with visual evidence on my `track-1-evidence` branch.
-- Track 1 (Challenge 01): built the next-pass interactive mobile prototype in `challenges/01-mobile-transcript/next/index.html` with full design rationale in `challenges/01-mobile-transcript/next/README.md` (4-speaker layout at 320px, decoupled smart player dock, live transcribing state, and inline preview boundary).
-- Track 4 (next): building an end-to-end workflow on the WhipScribe API once the API credit is active.
+Open [http://localhost:3000](http://localhost:3000).
+
+## Tech Stack
+
+- **Next.js 14** (App Router, serverless API routes)
+- **TypeScript** (strict mode)
+- **Tailwind CSS** (dark theme)
+- **WhipScribe API** (transcription + diarization)
+- **Google Gemini 2.0 Flash** (structured extraction)
+- **Deployed on Vercel** (zero-config)
+
+## Builder
+
+**Bama Charan Chhandogi**
+- Portfolio: [bamacharan.com](https://bamacharan.com)
+- GitHub: [BamaCharanChhandogi](https://github.com/BamaCharanChhandogi)
+- LinkedIn: [bamacharanchhandogi](https://www.linkedin.com/in/bamacharanchhandogi/)
+
+Currently building at ClipWise AI. Previously maintained TheAlgorithms (143K+ ⭐), shipped 3 VS Code extensions (3,000+ downloads), 2 npm packages (300+ downloads/month).
