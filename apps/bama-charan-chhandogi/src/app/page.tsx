@@ -49,11 +49,83 @@ interface Transcript {
 
 type AppState = "idle" | "uploading" | "processing" | "analyzing" | "done" | "error";
 
-const SPEAKER_COLORS = ["#60a5fa", "#f472b6", "#a78bfa", "#34d399", "#fbbf24", "#fb923c"];
 const fmt = (s: number) =>
   `${Math.floor(s / 60).toString().padStart(2, "0")}:${Math.floor(s % 60).toString().padStart(2, "0")}`;
 
-/* ───────── Pre-loaded Sample Vector for Instant 0s Preview ───────── */
+/* ───────── Clean SVG Geometric Icons (Zero Emojis) ───────── */
+function IconPlay({ className = "w-3.5 h-3.5" }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="currentColor">
+      <path d="M8 5.14v13.72a1 1 0 0 0 1.5.86l11-6.86a1 1 0 0 0 0-1.72l-11-6.86A1 1 0 0 0 8 5.14z" />
+    </svg>
+  );
+}
+
+function IconMic({ className = "w-4 h-4" }: { className?: string }) {
+  return (
+    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.75}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 003-3V5a3 3 0 00-6 0v6a3 3 0 003 3z" />
+    </svg>
+  );
+}
+
+function IconStop({ className = "w-4 h-4" }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="currentColor">
+      <rect x="6" y="6" width="12" height="12" rx="2" />
+    </svg>
+  );
+}
+
+function IconUpload({ className = "w-4 h-4" }: { className?: string }) {
+  return (
+    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.75}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+    </svg>
+  );
+}
+
+function IconExternal({ className = "w-3.5 h-3.5" }: { className?: string }) {
+  return (
+    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.75}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+    </svg>
+  );
+}
+
+function IconCopy({ className = "w-3.5 h-3.5" }: { className?: string }) {
+  return (
+    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.75}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+    </svg>
+  );
+}
+
+function IconCheck({ className = "w-3.5 h-3.5" }: { className?: string }) {
+  return (
+    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+    </svg>
+  );
+}
+
+function IconDownload({ className = "w-3.5 h-3.5" }: { className?: string }) {
+  return (
+    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.75}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+    </svg>
+  );
+}
+
+function IconTerminal({ className = "w-3.5 h-3.5" }: { className?: string }) {
+  return (
+    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.75}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+    </svg>
+  );
+}
+
+/* ───────── Curated Evaluation Vector (Instant 0s Preview) ───────── */
 const SAMPLE_TRANSCRIPT: Transcript = {
   duration: 36,
   text: "Good morning team. Quick sprint sync. Yesterday I shipped the authentication refactor with Clerk, and all test suites are passing. Great. I am working on the payment webhook integration. But I am currently blocked on the Stripe API test keys from DevOps, and I need them by today afternoon. Got it. I will ping Alex to get the Stripe keys within ten minutes. Also, let us agree to migrate to PostgreSQL instead of MongoDB for our primary database. Agreed. PostgreSQL is much better for relational integrity. I will create the Drizzle schema and database migrations by tomorrow morning.",
@@ -88,11 +160,11 @@ const SAMPLE_TRANSCRIPT: Transcript = {
 const SAMPLE_ANALYSIS: Analysis = {
   title: "Sprint Sync: Auth Shipped, Stripe Unblock & Postgres Migration",
   summary:
-    "Speaker 0 shipped the Clerk authentication refactor and committed to unblocking Speaker 1 by pinging Alex for Stripe API test keys. The team agreed on an architectural migration to PostgreSQL over MongoDB, with Speaker 1 owning Drizzle schema migrations due tomorrow.",
+    "Speaker 0 shipped the Clerk authentication refactor with all test suites passing and agreed to unblock Speaker 1 by pinging Alex for Stripe test keys. The team confirmed an architectural migration to PostgreSQL over MongoDB, with Speaker 1 owning Drizzle schema migrations due tomorrow morning.",
   actionItems: [
     {
       speaker: "Speaker 0",
-      task: "Ping Alex to provision Stripe API test keys",
+      task: "Ping Alex to provision Stripe API test keys for payment webhooks",
       deadline: "Within 10 minutes",
       timestamp: "00:18",
       priority: "high",
@@ -141,32 +213,30 @@ export default function Home() {
   const [transcript, setTranscript] = useState<Transcript | null>(null);
   const [analysis, setAnalysis] = useState<Analysis | null>(null);
   const [fileName, setFileName] = useState("");
-  const [activeTab, setActiveTab] = useState<"actions" | "transcript" | "github" | "slack">("actions");
+  const [activeTab, setActiveTab] = useState<"actions" | "github" | "slack" | "transcript">("actions");
   const [speakerNames, setSpeakerNames] = useState<Record<string, string>>({
-    "Speaker 0": "Alex (Lead Dev)",
+    "Speaker 0": "Alex (Lead)",
     "Speaker 1": "Sarah (Backend)",
   });
   const [targetRepo, setTargetRepo] = useState<string>("BamaCharanChhandogi/shipnotes");
   const [copiedId, setCopiedId] = useState<string | null>(null);
 
-  /* Audio & mic recording states */
+  /* Audio state */
   const fileRef = useRef<HTMLInputElement>(null);
   const audioRef = useRef<HTMLAudioElement>(null);
   const [audioUrl, setAudioUrl] = useState<string>("");
 
+  /* Recording state */
   const [isRecording, setIsRecording] = useState(false);
   const [recordSeconds, setRecordSeconds] = useState(0);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
-  /* ── Recording Timer ── */
   useEffect(() => {
     if (isRecording) {
       setRecordSeconds(0);
-      timerRef.current = setInterval(() => {
-        setRecordSeconds((prev) => prev + 1);
-      }, 1000);
+      timerRef.current = setInterval(() => setRecordSeconds((s) => s + 1), 1000);
     } else {
       if (timerRef.current) clearInterval(timerRef.current);
     }
@@ -175,7 +245,7 @@ export default function Home() {
     };
   }, [isRecording]);
 
-  /* ── Upload & Process File ── */
+  /* ── Upload & Process ── */
   const handleUpload = useCallback(async (file: File) => {
     setState("uploading");
     setError("");
@@ -199,7 +269,7 @@ export default function Home() {
 
   /* ── Poll WhipScribe Status ── */
   const pollJob = useCallback(async (id: string) => {
-    const maxAttempts = 120; // 6 mins max
+    const maxAttempts = 120;
     for (let i = 0; i < maxAttempts; i++) {
       await new Promise((r) => setTimeout(r, 3000));
       try {
@@ -211,10 +281,10 @@ export default function Home() {
           return;
         }
         if (job.status === "failed") {
-          throw new Error("Transcription failed — WhipScribe engine could not process audio.");
+          throw new Error("Transcription failed on WhipScribe GPU cluster.");
         }
         if (job.locked) {
-          throw new Error("Transcript locked — insufficient audio credits.");
+          throw new Error("Transcript locked due to credit balance.");
         }
       } catch (e) {
         setError(e instanceof Error ? e.message : "Polling error");
@@ -222,7 +292,7 @@ export default function Home() {
         return;
       }
     }
-    setError("Timeout — transcription exceeded 6 minutes.");
+    setError("Job timed out after 6 minutes.");
     setState("error");
   }, []);
 
@@ -245,7 +315,7 @@ export default function Home() {
     }
   }, []);
 
-  /* ── Live In-Browser Microphone Recording ── */
+  /* ── Live In-Browser Recording ── */
   const startRecording = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -254,14 +324,12 @@ export default function Home() {
       mediaRecorderRef.current = mediaRecorder;
 
       mediaRecorder.ondataavailable = (event) => {
-        if (event.data.size > 0) {
-          audioChunksRef.current.push(event.data);
-        }
+        if (event.data.size > 0) audioChunksRef.current.push(event.data);
       };
 
       mediaRecorder.onstop = () => {
         const audioBlob = new Blob(audioChunksRef.current, { type: "audio/webm" });
-        const audioFile = new File([audioBlob], `live_standup_${Date.now()}.webm`, {
+        const audioFile = new File([audioBlob], `standup_${Date.now()}.webm`, {
           type: "audio/webm",
         });
         stream.getTracks().forEach((track) => track.stop());
@@ -271,10 +339,8 @@ export default function Home() {
       mediaRecorder.start(250);
       setIsRecording(true);
       setError("");
-    } catch (err) {
-      setError(
-        "Microphone access denied or unavailable. Please grant permission or upload an audio file."
-      );
+    } catch {
+      setError("Microphone permission was denied or unavailable.");
     }
   };
 
@@ -285,7 +351,7 @@ export default function Home() {
     }
   };
 
-  /* ── 1-Click Evaluation Vector: Live API Process ── */
+  /* ── Evaluator Test Vectors ── */
   const handleTrySampleLive = async () => {
     try {
       setState("uploading");
@@ -296,29 +362,27 @@ export default function Home() {
       const response = await fetch("/sample-standup.wav");
       const blob = await response.blob();
       const sampleFile = new File([blob], "sample-standup.wav", { type: "audio/wav" });
-
       await handleUpload(sampleFile);
-    } catch (e) {
-      setError("Failed to load sample audio file.");
+    } catch {
+      setError("Failed to fetch evaluation sample audio.");
       setState("error");
     }
   };
 
-  /* ── 1-Click Instant Preview (0s Wait) ── */
   const handleInstantPreview = () => {
     setFileName("sample-standup.wav");
     setAudioUrl("/sample-standup.wav");
-    setJobId("preview-vector-sprint-sync");
+    setJobId("eval-sprint-vector-01");
     setTranscript(SAMPLE_TRANSCRIPT);
     setAnalysis(SAMPLE_ANALYSIS);
     setSpeakerNames({
-      "Speaker 0": "Alex (Lead Dev)",
+      "Speaker 0": "Alex (Lead)",
       "Speaker 1": "Sarah (Backend)",
     });
     setState("done");
   };
 
-  /* ── Seek Audio to Timestamp ── */
+  /* ── Audio Seeking ── */
   const seekTo = (seconds: number) => {
     if (audioRef.current) {
       audioRef.current.currentTime = seconds;
@@ -332,16 +396,12 @@ export default function Home() {
   };
 
   const spk = (id: string) => speakerNames[id] || id;
-  const spkColor = (id: string) => {
-    const n = parseInt(id.replace(/\D/g, "") || "0");
-    return SPEAKER_COLORS[n % SPEAKER_COLORS.length];
-  };
 
-  /* ── Copy to Clipboard Helper ── */
+  /* ── Copy Helper ── */
   const copy = (text: string, id: string) => {
     navigator.clipboard.writeText(text);
     setCopiedId(id);
-    setTimeout(() => setCopiedId(null), 2000);
+    setTimeout(() => setCopiedId(null), 1800);
   };
 
   /* ── GitHub Issues Generator ── */
@@ -349,10 +409,9 @@ export default function Home() {
     if (!analysis) return [];
     return analysis.actionItems.map((item, i) => {
       const issueTitle = `[ShipNotes] ${item.task}`;
-      const issueBody = `### 📋 Action Item from Sprint Standup\n\n- **Assignee:** @${spk(item.speaker)}\n- **Priority:** ${item.priority.toUpperCase()}\n- **Deadline:** ${item.deadline}\n- **Timestamp Evidence:** \`[${item.timestamp}]\` in recording\n\n> Extracted automatically by [ShipNotes](https://github.com/BamaCharanChhandogi/shipnotes) using WhipScribe API.\n\n*Audio Job ID: \`${jobId}\`*`;
+      const issueBody = `### Action Item from Sprint Standup\n\n- **Assignee:** @${spk(item.speaker)}\n- **Priority:** ${item.priority.toUpperCase()}\n- **Deadline:** ${item.deadline}\n- **Quoted Evidence:** \`[${item.timestamp}]\` in standup recording\n\n> Extracted automatically by [ShipNotes](https://github.com/BamaCharanChhandogi/shipnotes) via WhipScribe API.\n\n*Reference Job: \`${jobId}\`*`;
       const labels = [item.priority === "high" ? "urgent" : "task", "shipnotes"];
 
-      // Pre-fill URL for 1-click issue creation
       const prefillUrl = `https://github.com/${targetRepo}/issues/new?title=${encodeURIComponent(
         issueTitle
       )}&body=${encodeURIComponent(issueBody)}&labels=${encodeURIComponent(labels.join(","))}`;
@@ -372,313 +431,295 @@ export default function Home() {
   const generateSlackDigest = () => {
     if (!analysis) return "";
     const lines = [
-      `📋 *${analysis.title}*`,
+      `*${analysis.title}*`,
       analysis.summary,
       "",
-      `*🚀 Shipped (${analysis.shipped.length})*`,
+      `*Shipped (${analysis.shipped.length})*`,
       ...analysis.shipped.map((s) => `• ${s.description} — _${spk(s.speaker)}_ (\`${s.timestamp}\`)`),
       "",
-      `*📌 Action Items (${analysis.actionItems.length})*`,
+      `*Action Items (${analysis.actionItems.length})*`,
       ...analysis.actionItems.map(
         (a) =>
-          `• ${a.priority === "high" ? "🔴" : a.priority === "medium" ? "🟡" : "🟢"} *${a.task}* → _${spk(
+          `• ${a.priority === "high" ? "[URGENT]" : "[TASK]"} *${a.task}* — _${spk(
             a.speaker
-          )}_ (Due: ${a.deadline}) [${a.timestamp}]`
+          )}_ (Due: ${a.deadline}) [\`${a.timestamp}\`]`
       ),
       "",
     ];
     if (analysis.blockers.length) {
       lines.push(
-        `*🚧 Blockers (${analysis.blockers.length})*`,
-        ...analysis.blockers.map(
-          (b) => `• ${b.severity === "critical" ? "🔴" : "🟠"} ${b.description} — _${spk(b.owner)}_`
-        ),
+        `*Blockers (${analysis.blockers.length})*`,
+        ...analysis.blockers.map((b) => `• ${b.description} — _${spk(b.owner)}_ (\`${b.timestamp}\`)`),
         ""
       );
     }
     if (analysis.decisions.length) {
       lines.push(
-        `*✅ Decisions (${analysis.decisions.length})*`,
+        `*Decisions (${analysis.decisions.length})*`,
         ...analysis.decisions.map((d) => `• ${d.summary} (\`${d.timestamp}\`)`),
         ""
       );
     }
-    lines.push("_Generated automatically by ShipNotes · Powered by WhipScribe API_");
+    lines.push("_Generated via ShipNotes · WhipScribe API_");
     return lines.join("\n");
   };
 
-  /* ── Download Standup Markdown Notes ── */
+  /* ── Download Markdown Report ── */
   const downloadMarkdownReport = () => {
     if (!analysis || !transcript) return;
     const content = `# ${analysis.title}
-*Recorded duration: ${fmt(transcript.duration)} | Extracted via ShipNotes & WhipScribe API*
+Recorded duration: ${fmt(transcript.duration)} | Extracted via ShipNotes
 
-## Executive Summary
+## Summary
 ${analysis.summary}
 
-## 🚀 Shipped
-${analysis.shipped.map((s) => `- **${s.description}** (${spk(s.speaker)} at \`${s.timestamp}\`)`).join("\n")}
+## Shipped
+${analysis.shipped.map((s) => `- ${s.description} (${spk(s.speaker)} at ${s.timestamp})`).join("\n")}
 
-## 📌 Action Items
+## Action Items
 ${analysis.actionItems
   .map(
     (a) =>
-      `- [ ] **${a.task}** | Owner: @${spk(a.speaker)} | Priority: \`${a.priority}\` | Due: ${a.deadline} | Evidence: \`[${a.timestamp}]\``
+      `- [ ] ${a.task} (Owner: @${spk(a.speaker)} | Priority: ${a.priority} | Due: ${a.deadline} | Evidence: [${a.timestamp}])`
   )
   .join("\n")}
 
-## 🚧 Blockers
-${analysis.blockers
-  .map((b) => `- ⚠️ **${b.description}** (Owner: ${spk(b.owner)} | Severity: ${b.severity})`)
-  .join("\n")}
+## Blockers
+${analysis.blockers.map((b) => `- ${b.description} (Owner: ${spk(b.owner)} | Severity: ${b.severity})`).join("\n")}
 
-## ✅ Decisions
-${analysis.decisions.map((d) => `- **${d.summary}** (Agreed by: ${d.speakers.map(spk).join(", ")})`).join("\n")}
+## Decisions
+${analysis.decisions.map((d) => `- ${d.summary} (Agreed by: ${d.speakers.map(spk).join(", ")})`).join("\n")}
 
 ---
-### Full Diarized Transcript
-${transcript.segments.map((s) => `**[${fmt(s.start)}] ${spk(s.speaker)}:** ${s.text}`).join("\n\n")}
+### Diarized Dialogue
+${transcript.segments.map((s) => `[${fmt(s.start)}] ${spk(s.speaker)}: ${s.text}`).join("\n\n")}
 `;
 
     const blob = new Blob([content], { type: "text/markdown;charset=utf-8" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `standup-notes-${Date.now()}.md`;
+    a.download = `standup_${Date.now()}.md`;
     a.click();
     URL.revokeObjectURL(url);
   };
 
   /* ─────────────────── RENDER ─────────────────── */
 
-  /* ── View 1: Idle & Upload State ── */
+  /* ── View 1: Landing & Capture ── */
   if (state === "idle" || state === "error") {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center p-6 bg-[#0a0a0a]">
-        {/* Top Announcement Badge */}
-        <div className="mb-4 inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-green-500/10 border border-green-500/30 text-green-400 text-xs font-medium">
-          <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-          WhipScribe Buildathon Track 4 Submission
-        </div>
-
-        {/* Header */}
-        <div className="text-center mb-8 max-w-xl">
-          <div className="flex items-center justify-center gap-3 mb-3">
-            <div className="w-12 h-12 rounded-xl bg-green-500/20 border border-green-500/40 flex items-center justify-center text-2xl shadow-lg shadow-green-500/10">
-              📋
-            </div>
-            <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-white">
-              Ship<span className="text-green-500">Notes</span>
-            </h1>
-          </div>
-          <p className="text-zinc-300 text-base sm:text-lg leading-relaxed">
-            Transform sprint standup audio into structured <strong className="text-white">GitHub Issues</strong> and <strong className="text-white">Slack digests</strong> in seconds.
-          </p>
-          <p className="text-zinc-500 text-xs sm:text-sm mt-2">
-            Automated Voice-to-Backlog pipeline powered by WhipScribe GPU Transcription
-          </p>
-        </div>
-
-        {/* 1-Click Evaluation Hero Card */}
-        <div className="w-full max-w-xl mb-6 p-4 rounded-xl bg-gradient-to-r from-zinc-900 via-zinc-900 to-green-950/40 border border-green-500/30 shadow-xl">
-          <div className="flex items-center justify-between gap-3 mb-2">
-            <div className="flex items-center gap-2">
-              <span className="text-xl">⚡</span>
-              <span className="text-sm font-semibold text-white">Evaluator 1-Click Demo</span>
-            </div>
-            <span className="text-xs px-2 py-0.5 rounded bg-green-500/20 text-green-300 font-mono">
-              Zero Upload Required
+      <div className="min-h-screen bg-[#09090b] text-[#f4f4f5] flex flex-col justify-between p-6 sm:p-12 max-w-4xl mx-auto">
+        {/* Top Minimalist Header */}
+        <header className="flex items-center justify-between border-b border-zinc-800/60 pb-5">
+          <div className="flex items-center gap-3">
+            <span className="font-mono text-xs uppercase tracking-widest text-zinc-500">
+              ShipNotes
             </span>
+            <span className="text-zinc-700">/</span>
+            <span className="text-xs text-zinc-400">Track 4 Submission</span>
           </div>
-          <p className="text-xs text-zinc-400 mb-3">
-            2-engineer sprint standup covering Auth shipping, Stripe webhook blockers, and PostgreSQL migration.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-2">
-            <button
-              onClick={handleInstantPreview}
-              className="flex-1 px-4 py-2 text-xs font-semibold rounded-lg bg-green-600 hover:bg-green-500 text-white transition-all shadow-md flex items-center justify-center gap-1.5"
-            >
-              <span>🚀</span> Instant Interactive Preview (0s)
-            </button>
-            <button
-              onClick={handleTrySampleLive}
-              className="flex-1 px-4 py-2 text-xs font-medium rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-200 border border-zinc-700 transition-all flex items-center justify-center gap-1.5"
-            >
-              <span>⚡</span> Run Sample via Live WhipScribe API
-            </button>
-          </div>
-        </div>
-
-        {/* Primary Input Container (Live Mic or Dropzone) */}
-        <div className="w-full max-w-xl bg-zinc-900/60 border border-zinc-800 rounded-2xl p-6 backdrop-blur shadow-2xl">
-          {/* In-Browser Live Microphone Recorder */}
-          <div className="mb-6 p-4 rounded-xl bg-zinc-950 border border-zinc-800/80 text-center">
-            <div className="flex items-center justify-center gap-2 mb-2">
-              <span className="text-sm font-medium text-zinc-300">Live Voice Standup</span>
-              {isRecording && (
-                <span className="inline-flex items-center gap-1 text-xs text-red-400 font-mono">
-                  <span className="w-2 h-2 rounded-full bg-red-500 animate-ping" />
-                  REC {fmt(recordSeconds)}
-                </span>
-              )}
-            </div>
-
-            {!isRecording ? (
-              <button
-                onClick={startRecording}
-                className="w-full py-3 px-4 rounded-xl bg-red-600/10 hover:bg-red-600/20 border border-red-500/30 text-red-400 font-semibold text-sm transition-all flex items-center justify-center gap-2"
-              >
-                <span className="w-3 h-3 rounded-full bg-red-500" />
-                <span>Record Live Standup via Mic</span>
-              </button>
-            ) : (
-              <div className="space-y-3">
-                <div className="flex justify-center items-center gap-1 h-6">
-                  <div className="w-1 bg-red-500 h-3 animate-pulse" />
-                  <div className="w-1 bg-red-500 h-6 animate-pulse" />
-                  <div className="w-1 bg-red-500 h-4 animate-pulse" />
-                  <div className="w-1 bg-red-500 h-5 animate-pulse" />
-                  <div className="w-1 bg-red-500 h-2 animate-pulse" />
-                </div>
-                <button
-                  onClick={stopRecording}
-                  className="w-full py-2.5 px-4 rounded-xl bg-red-600 hover:bg-red-500 text-white font-semibold text-sm transition-all shadow-lg shadow-red-500/20"
-                >
-                  ⏹ Stop & Process with WhipScribe
-                </button>
-              </div>
-            )}
-          </div>
-
-          <div className="relative flex py-2 items-center">
-            <div className="flex-grow border-t border-zinc-800" />
-            <span className="flex-shrink mx-4 text-xs font-mono text-zinc-600 uppercase">OR UPLOAD AUDIO</span>
-            <div className="flex-grow border-t border-zinc-800" />
-          </div>
-
-          {/* Drag & Drop Area */}
-          <div
-            className="mt-4 border-2 border-dashed border-zinc-700 hover:border-green-500/60 rounded-xl p-8 text-center cursor-pointer transition-all bg-zinc-950/40 hover:bg-zinc-950/80"
-            onClick={() => fileRef.current?.click()}
-            onDragOver={(e) => e.preventDefault()}
-            onDrop={(e) => {
-              e.preventDefault();
-              const f = e.dataTransfer.files[0];
-              if (f) handleUpload(f);
-            }}
-          >
-            <div className="text-3xl mb-2">📁</div>
-            <p className="text-zinc-200 text-sm font-medium">Drop an existing recording here</p>
-            <p className="text-zinc-500 text-xs mt-1">MP3, WAV, M4A, MP4, WebM (up to 10 min)</p>
-            <input
-              ref={fileRef}
-              type="file"
-              accept="audio/*,video/*,.mp3,.wav,.m4a,.mp4,.webm,.ogg,.flac"
-              className="hidden"
-              onChange={(e) => {
-                const f = e.target.files?.[0];
-                if (f) handleUpload(f);
-              }}
-            />
-          </div>
-        </div>
-
-        {/* Error Notification */}
-        {state === "error" && (
-          <div className="mt-6 p-4 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 max-w-xl w-full text-center">
-            <p className="font-semibold text-sm">Processing Error</p>
-            <p className="text-xs mt-1">{error}</p>
-            <button
-              className="mt-3 text-xs font-semibold px-3 py-1 bg-red-500/20 hover:bg-red-500/30 rounded text-red-200"
-              onClick={() => {
-                setState("idle");
-                setError("");
-              }}
-            >
-              Reset & Try Again
-            </button>
-          </div>
-        )}
-
-        {/* Footer Info */}
-        <div className="mt-12 text-center text-xs text-zinc-600">
-          <p>
-            Built by{" "}
-            <a href="https://bamacharan.com" target="_blank" className="text-zinc-400 hover:underline">
-              Bama Charan Chhandogi
-            </a>{" "}
-            for the WhipScribe Buildathon ·{" "}
+          <div className="flex items-center gap-4 text-xs font-mono text-zinc-400">
+            <span className="inline-flex items-center gap-1.5 text-zinc-400">
+              <span className="w-1.5 h-1.5 rounded-full bg-indigo-500" />
+              WhipScribe API
+            </span>
             <a
               href="https://github.com/BamaCharanChhandogi/shipnotes"
               target="_blank"
-              className="text-zinc-400 hover:underline"
+              rel="noreferrer"
+              className="text-zinc-400 hover:text-white transition-colors"
             >
-              GitHub Source
+              GitHub
             </a>
-          </p>
-        </div>
+          </div>
+        </header>
+
+        {/* Hero Section */}
+        <main className="my-auto py-12 space-y-10">
+          <div className="space-y-3">
+            <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-white">
+              Sprint standups to GitHub backlog.
+            </h1>
+            <p className="text-zinc-400 text-sm sm:text-base max-w-xl leading-relaxed">
+              Capture engineering voice notes. WhipScribe diarizes speakers, Gemini extracts actionable commitments, and ShipNotes drafts verified GitHub Issues without manual typing.
+            </p>
+          </div>
+
+          {/* Evaluator 1-Click Test Vector */}
+          <div className="p-4 rounded-xl bg-zinc-900/40 border border-zinc-800/80 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="space-y-0.5">
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-mono text-indigo-400 font-medium">vector: sample-standup.wav</span>
+                <span className="text-[10px] font-mono text-zinc-500">2 speakers · 36s</span>
+              </div>
+              <p className="text-xs text-zinc-400">
+                Auth refactor, Stripe webhook blocker, PostgreSQL migration consensus.
+              </p>
+            </div>
+            <div className="flex items-center gap-2 shrink-0">
+              <button
+                onClick={handleInstantPreview}
+                className="px-3.5 py-1.5 text-xs font-medium bg-white text-black hover:bg-zinc-200 rounded-lg transition-colors"
+              >
+                Instant Preview (0s)
+              </button>
+              <button
+                onClick={handleTrySampleLive}
+                className="px-3 py-1.5 text-xs font-mono text-zinc-300 hover:text-white bg-zinc-800/80 hover:bg-zinc-800 border border-zinc-700/60 rounded-lg transition-colors"
+              >
+                Run Live API
+              </button>
+            </div>
+          </div>
+
+          {/* Capture Panel: Live Mic + Dropzone */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {/* Live Mic Panel */}
+            <div className="p-6 rounded-xl bg-zinc-900/20 border border-zinc-800/80 flex flex-col justify-between space-y-4">
+              <div className="space-y-1">
+                <span className="font-mono text-[11px] uppercase tracking-wider text-zinc-500">Input 01</span>
+                <h3 className="text-sm font-medium text-zinc-200">Browser Microphone</h3>
+                <p className="text-xs text-zinc-400">Record a brief standup update directly from your device.</p>
+              </div>
+
+              {!isRecording ? (
+                <button
+                  onClick={startRecording}
+                  className="w-full py-2.5 px-4 rounded-lg bg-zinc-900 hover:bg-zinc-800 border border-zinc-700 text-xs font-medium text-zinc-200 hover:text-white transition-all flex items-center justify-center gap-2"
+                >
+                  <IconMic className="w-3.5 h-3.5 text-indigo-400" />
+                  <span>Record Live Audio</span>
+                </button>
+              ) : (
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between text-xs font-mono text-zinc-400">
+                    <span className="inline-flex items-center gap-1.5 text-red-400">
+                      <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
+                      RECORDING
+                    </span>
+                    <span>{fmt(recordSeconds)}</span>
+                  </div>
+                  <button
+                    onClick={stopRecording}
+                    className="w-full py-2 px-4 rounded-lg bg-red-950/60 hover:bg-red-900/60 border border-red-800 text-xs font-medium text-red-200 transition-all flex items-center justify-center gap-2"
+                  >
+                    <IconStop className="w-3.5 h-3.5" />
+                    <span>Stop and Process</span>
+                  </button>
+                </div>
+              )}
+            </div>
+
+            {/* Dropzone Panel */}
+            <div
+              onClick={() => fileRef.current?.click()}
+              onDragOver={(e) => e.preventDefault()}
+              onDrop={(e) => {
+                e.preventDefault();
+                const f = e.dataTransfer.files[0];
+                if (f) handleUpload(f);
+              }}
+              className="p-6 rounded-xl bg-zinc-900/20 border border-zinc-800/80 hover:border-zinc-700 transition-all cursor-pointer flex flex-col justify-between space-y-4 group"
+            >
+              <div className="space-y-1">
+                <span className="font-mono text-[11px] uppercase tracking-wider text-zinc-500">Input 02</span>
+                <h3 className="text-sm font-medium text-zinc-200">Audio File</h3>
+                <p className="text-xs text-zinc-400">Drop an existing MP3, WAV, M4A, or WebM recording.</p>
+              </div>
+
+              <div className="py-2.5 px-4 rounded-lg border border-dashed border-zinc-700/80 group-hover:border-zinc-600 text-center text-xs text-zinc-400 group-hover:text-zinc-300 transition-colors flex items-center justify-center gap-2">
+                <IconUpload className="w-3.5 h-3.5 text-zinc-500" />
+                <span>Select file from disk</span>
+              </div>
+              <input
+                ref={fileRef}
+                type="file"
+                accept="audio/*,video/*,.mp3,.wav,.m4a,.mp4,.webm,.ogg,.flac"
+                className="hidden"
+                onChange={(e) => {
+                  const f = e.target.files?.[0];
+                  if (f) handleUpload(f);
+                }}
+              />
+            </div>
+          </div>
+
+          {/* Error Notice */}
+          {state === "error" && (
+            <div className="p-4 rounded-lg bg-red-950/30 border border-red-900/60 text-xs text-red-300 flex items-center justify-between">
+              <span>{error}</span>
+              <button
+                onClick={() => {
+                  setState("idle");
+                  setError("");
+                }}
+                className="underline hover:text-white"
+              >
+                Reset
+              </button>
+            </div>
+          )}
+        </main>
+
+        {/* Footer */}
+        <footer className="pt-6 border-t border-zinc-800/60 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs text-zinc-500 font-mono">
+          <span>Candidate: Bama Charan Chhandogi</span>
+          <span>Engine: WhipScribe GPU Transcription + Gemini Synthesis</span>
+        </footer>
       </div>
     );
   }
 
-  /* ── View 2: Progress & Processing States ── */
+  /* ── View 2: Processing State ── */
   if (state === "uploading" || state === "processing" || state === "analyzing") {
-    const step =
+    const stepLabel =
       state === "uploading"
-        ? { icon: "📤", title: "Uploading Standup Audio...", sub: fileName }
+        ? "Uploading audio payload..."
         : state === "processing"
-        ? {
-            icon: "⚡",
-            title: "WhipScribe GPU Transcription & Diarization...",
-            sub: `Active Job ID: ${jobId.slice(0, 12)}...`,
-          }
-        : {
-            icon: "🧠",
-            title: "Gemini 3.6 Flash Intelligence Synthesis...",
-            sub: "Extracting action items, blockers, decisions & shipped commits",
-          };
+        ? "Running WhipScribe GPU diarization & word alignment..."
+        : "Extracting action items and engineering commitments...";
 
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center p-6 bg-[#0a0a0a]">
-        <div className="text-center max-w-md p-8 rounded-2xl bg-zinc-900/80 border border-zinc-800 shadow-2xl">
-          <div className="text-6xl mb-6 animate-bounce">{step.icon}</div>
-          <h3 className="text-lg font-bold text-white">{step.title}</h3>
-          <p className="text-zinc-400 text-xs font-mono mt-2">{step.sub}</p>
-
-          <div className="mt-8 flex items-center justify-center gap-2">
-            <div className="w-2.5 h-2.5 rounded-full bg-green-500 animate-ping" />
-            <span className="text-xs text-zinc-500">Live GPU Pipeline Active</span>
+      <div className="min-h-screen bg-[#09090b] text-[#f4f4f5] flex flex-col items-center justify-center p-6">
+        <div className="w-full max-w-sm space-y-4 text-center">
+          <div className="w-8 h-8 rounded-full border-2 border-zinc-700 border-t-indigo-500 animate-spin mx-auto" />
+          <div className="space-y-1">
+            <h3 className="text-sm font-medium text-zinc-200">{stepLabel}</h3>
+            <p className="text-xs font-mono text-zinc-500">{fileName || `job: ${jobId.slice(0, 12)}`}</p>
           </div>
         </div>
       </div>
     );
   }
 
-  /* ── View 3: Complete Results Dashboard ── */
+  /* ── View 3: Complete Executive Results ── */
   if (state === "done" && analysis && transcript) {
     const ghIssues = generateGitHubIssues();
     const slackMsg = generateSlackDigest();
 
     return (
-      <div className="min-h-screen bg-[#0a0a0a] text-zinc-100 pb-16">
+      <div className="min-h-screen bg-[#09090b] text-[#f4f4f5] pb-24">
         {/* Navigation Sticky Topbar */}
-        <header className="sticky top-0 z-50 bg-zinc-950/90 backdrop-blur border-b border-zinc-800/80 px-6 py-3">
-          <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+        <header className="sticky top-0 z-40 bg-[#09090b]/90 backdrop-blur border-b border-zinc-800/80 px-6 py-3.5">
+          <div className="max-w-5xl mx-auto flex items-center justify-between gap-4">
             <div className="flex items-center gap-3">
-              <span className="text-xl">📋</span>
-              <span className="font-bold text-white tracking-tight">ShipNotes</span>
-              <span className="text-zinc-600 text-sm hidden sm:inline">/</span>
-              <span className="text-zinc-400 text-xs sm:text-sm font-medium truncate max-w-xs">
+              <span className="font-mono text-xs uppercase tracking-wider text-zinc-500">
+                ShipNotes
+              </span>
+              <span className="text-zinc-700">/</span>
+              <span className="text-xs font-medium text-zinc-300 truncate max-w-xs">
                 {analysis.title}
               </span>
             </div>
 
-            <div className="flex items-center gap-3 w-full sm:w-auto justify-between sm:justify-end">
+            <div className="flex items-center gap-2">
               <button
                 onClick={downloadMarkdownReport}
-                className="px-3 py-1.5 text-xs font-medium bg-zinc-800 hover:bg-zinc-700 text-zinc-200 border border-zinc-700 rounded-lg transition-all flex items-center gap-1.5"
+                className="px-3 py-1.5 text-xs font-mono text-zinc-300 hover:text-white bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 rounded-lg transition-colors flex items-center gap-1.5"
               >
-                <span>📥</span> Export Notes (.md)
+                <IconDownload />
+                <span>Export .md</span>
               </button>
               <button
                 onClick={() => {
@@ -686,216 +727,190 @@ ${transcript.segments.map((s) => `**[${fmt(s.start)}] ${spk(s.speaker)}:** ${s.t
                   setTranscript(null);
                   setAnalysis(null);
                 }}
-                className="px-3 py-1.5 text-xs font-medium bg-green-600/20 hover:bg-green-600/30 text-green-300 border border-green-500/30 rounded-lg transition-all"
+                className="px-3 py-1.5 text-xs font-mono text-zinc-300 hover:text-white bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 rounded-lg transition-colors"
               >
-                + New Standup
+                New Session
               </button>
             </div>
           </div>
         </header>
 
-        <main className="max-w-6xl mx-auto p-6 space-y-6">
-          {/* Executive Standup Briefing Card */}
-          <div className="p-6 rounded-2xl bg-zinc-900 border border-zinc-800 shadow-xl">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-zinc-800/80 pb-4 mb-4">
-              <div>
-                <h1 className="text-2xl font-bold text-white tracking-tight">{analysis.title}</h1>
-                <p className="text-zinc-400 text-sm mt-1">{analysis.summary}</p>
+        <main className="max-w-5xl mx-auto px-6 pt-8 space-y-8">
+          {/* Executive Standup Header */}
+          <div className="space-y-4">
+            <div className="space-y-1.5">
+              <div className="flex items-center gap-3">
+                <span className="px-2 py-0.5 rounded text-[11px] font-mono bg-zinc-900 border border-zinc-800 text-zinc-400">
+                  {fmt(transcript.duration)} duration
+                </span>
+                <span className="px-2 py-0.5 rounded text-[11px] font-mono bg-zinc-900 border border-zinc-800 text-zinc-400">
+                  {Object.keys(analysis.speakerMap).length} participants
+                </span>
               </div>
-              <div className="shrink-0 flex items-center gap-3 text-xs font-mono text-zinc-400">
-                <span className="px-2.5 py-1 rounded bg-zinc-800">⏱ {fmt(transcript.duration)}</span>
-                <span className="px-2.5 py-1 rounded bg-zinc-800">👥 {Object.keys(analysis.speakerMap).length} Speakers</span>
-              </div>
+              <h1 className="text-2xl font-semibold tracking-tight text-white">{analysis.title}</h1>
+              <p className="text-zinc-400 text-sm leading-relaxed max-w-3xl">{analysis.summary}</p>
             </div>
 
-            {/* Interactive Speaker Name Mapping */}
-            <div>
-              <p className="text-xs uppercase tracking-wider font-semibold text-zinc-500 mb-2">
-                Identified Speakers (Edit names live)
-              </p>
-              <div className="flex flex-wrap gap-3">
-                {Object.entries(analysis.speakerMap).map(([id, stats]) => (
-                  <div
-                    key={id}
-                    className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-zinc-950 border border-zinc-800 text-xs"
-                  >
-                    <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: spkColor(id) }} />
-                    <input
-                      className="bg-transparent border-b border-zinc-700 focus:border-green-500 text-zinc-200 focus:outline-none w-28 text-xs font-medium"
-                      placeholder={id}
-                      value={speakerNames[id] || ""}
-                      onChange={(e) =>
-                        setSpeakerNames((prev) => ({ ...prev, [id]: e.target.value }))
-                      }
-                    />
-                    <span className="text-zinc-500 font-mono">({fmt(stats.totalTime)})</span>
-                  </div>
-                ))}
-              </div>
+            {/* Speaker Tagging */}
+            <div className="flex flex-wrap items-center gap-2 pt-2">
+              <span className="text-[11px] font-mono uppercase tracking-wider text-zinc-500 mr-2">
+                Speakers:
+              </span>
+              {Object.entries(analysis.speakerMap).map(([id, stats]) => (
+                <div
+                  key={id}
+                  className="inline-flex items-center gap-2 px-2.5 py-1 rounded-md bg-zinc-900/60 border border-zinc-800 text-xs"
+                >
+                  <span className="w-1.5 h-1.5 rounded-full bg-indigo-500" />
+                  <input
+                    className="bg-transparent border-b border-transparent hover:border-zinc-700 focus:border-indigo-500 text-zinc-200 focus:outline-none w-24 text-xs"
+                    value={speakerNames[id] || ""}
+                    placeholder={id}
+                    onChange={(e) =>
+                      setSpeakerNames((prev) => ({ ...prev, [id]: e.target.value }))
+                    }
+                  />
+                  <span className="text-zinc-500 font-mono text-[10px]">{fmt(stats.totalTime)}</span>
+                </div>
+              ))}
             </div>
           </div>
 
-          {/* Synchronized Audio Player */}
+          {/* Integrated Sleek Audio Bar */}
           {audioUrl && (
-            <div className="p-4 rounded-xl bg-zinc-900 border border-zinc-800 flex flex-col sm:flex-row items-center gap-4">
-              <span className="text-xs font-medium text-zinc-400 shrink-0 flex items-center gap-1.5">
-                <span>🔊</span> Synchronized Recording:
-              </span>
-              <audio ref={audioRef} src={audioUrl} controls className="w-full h-9 rounded-lg" />
+            <div className="p-3.5 rounded-xl bg-zinc-900/40 border border-zinc-800/80 flex items-center gap-3">
+              <span className="font-mono text-xs text-zinc-500">Audio playback:</span>
+              <audio ref={audioRef} src={audioUrl} controls className="w-full h-8 rounded" />
             </div>
           )}
 
-          {/* Tab Navigation */}
-          <div className="flex gap-2 border-b border-zinc-800 pb-1 overflow-x-auto">
+          {/* Navigation Tabs */}
+          <div className="flex border-b border-zinc-800 gap-6">
             {(
               [
-                { id: "actions", label: `📌 Actions & Highlights (${analysis.actionItems.length})` },
-                { id: "github", label: `🐙 GitHub Issues (${ghIssues.length})` },
-                { id: "slack", label: `💬 Slack Digest` },
-                { id: "transcript", label: `📝 Diarized Transcript (${transcript.segments.length})` },
+                { id: "actions", label: `Action Items (${analysis.actionItems.length})` },
+                { id: "github", label: `GitHub Issues (${ghIssues.length})` },
+                { id: "slack", label: `Team Digest` },
+                { id: "transcript", label: `Diarized Transcript` },
               ] as const
             ).map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all whitespace-nowrap ${
-                  activeTab === tab.id
-                    ? "bg-green-600 text-white shadow-lg shadow-green-600/20"
-                    : "text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900"
+                className={`pb-3 text-xs font-medium transition-colors relative ${
+                  activeTab === tab.id ? "text-white" : "text-zinc-400 hover:text-zinc-200"
                 }`}
               >
                 {tab.label}
+                {activeTab === tab.id && (
+                  <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-indigo-500" />
+                )}
               </button>
             ))}
           </div>
 
-          {/* ── TAB 1: Actions, Blockers, Shipped, Decisions ── */}
+          {/* ── TAB 1: Action Items & Engineering Highlights ── */}
           {activeTab === "actions" && (
-            <div className="space-y-6">
-              {/* Shipped Highlights */}
+            <div className="space-y-8">
+              {/* Shipped Items */}
               {analysis.shipped.length > 0 && (
-                <div className="p-5 rounded-2xl bg-green-950/20 border border-green-500/20">
-                  <h3 className="text-sm font-bold text-green-400 uppercase tracking-wider mb-3 flex items-center gap-2">
-                    <span>🚀</span> Shipped Since Last Standup
+                <div className="space-y-3">
+                  <h3 className="font-mono text-xs uppercase tracking-wider text-zinc-500">
+                    Shipped Achievements
                   </h3>
-                  <div className="space-y-2">
+                  <div className="divide-y divide-zinc-800/60 border border-zinc-800/80 rounded-xl overflow-hidden bg-zinc-900/20">
                     {analysis.shipped.map((item, i) => (
-                      <div
-                        key={i}
-                        className="flex items-start justify-between gap-3 p-3 rounded-xl bg-zinc-900/80 border border-zinc-800"
-                      >
-                        <div className="flex items-start gap-3">
-                          <button
-                            onClick={() => seekTo(parseTs(item.timestamp))}
-                            className="text-xs font-mono text-green-400 hover:underline px-2 py-0.5 rounded bg-green-500/10 shrink-0 mt-0.5"
-                          >
-                            ▶ {item.timestamp}
-                          </button>
-                          <div>
-                            <p className="text-sm font-medium text-zinc-200">{item.description}</p>
-                            <p className="text-xs text-zinc-500 mt-1">
-                              Shipped by: <span style={{ color: spkColor(item.speaker) }}>{spk(item.speaker)}</span>
-                            </p>
-                          </div>
+                      <div key={i} className="p-4 flex items-start justify-between gap-4">
+                        <div className="space-y-1">
+                          <p className="text-sm font-medium text-zinc-200">{item.description}</p>
+                          <span className="text-xs text-zinc-500">
+                            Owner: <span className="text-zinc-300">{spk(item.speaker)}</span>
+                          </span>
                         </div>
+                        <button
+                          onClick={() => seekTo(parseTs(item.timestamp))}
+                          className="shrink-0 px-2 py-1 rounded bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-[11px] font-mono text-zinc-400 hover:text-white transition-colors flex items-center gap-1"
+                        >
+                          <IconPlay className="w-2.5 h-2.5" />
+                          <span>{item.timestamp}</span>
+                        </button>
                       </div>
                     ))}
                   </div>
                 </div>
               )}
 
-              {/* Action Items List */}
-              <div className="p-5 rounded-2xl bg-zinc-900 border border-zinc-800">
-                <h3 className="text-sm font-bold text-zinc-300 uppercase tracking-wider mb-3 flex items-center gap-2">
-                  <span>📌</span> Action Items & Commitments
+              {/* Action Items */}
+              <div className="space-y-3">
+                <h3 className="font-mono text-xs uppercase tracking-wider text-zinc-500">
+                  Committed Action Items
                 </h3>
-                <div className="space-y-3">
+                <div className="divide-y divide-zinc-800/60 border border-zinc-800/80 rounded-xl overflow-hidden bg-zinc-900/20">
                   {analysis.actionItems.map((item, i) => (
-                    <div
-                      key={i}
-                      className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 p-4 rounded-xl bg-zinc-950 border border-zinc-800/80 hover:border-zinc-700 transition-all"
-                    >
-                      <div className="flex items-start gap-3 flex-1">
-                        <button
-                          onClick={() => seekTo(parseTs(item.timestamp))}
-                          className="text-xs font-mono text-blue-400 hover:underline px-2 py-0.5 rounded bg-blue-500/10 shrink-0 mt-0.5"
-                        >
-                          ▶ {item.timestamp}
-                        </button>
-                        <div>
-                          <div className="flex items-center gap-2 flex-wrap">
-                            <span
-                              className={`text-[10px] font-bold px-2 py-0.5 rounded-full uppercase ${
-                                item.priority === "high"
-                                  ? "bg-red-500/20 text-red-400"
-                                  : item.priority === "medium"
-                                  ? "bg-yellow-500/20 text-yellow-400"
-                                  : "bg-green-500/20 text-green-400"
-                              }`}
-                            >
-                              {item.priority}
-                            </span>
-                            <span className="text-sm font-medium text-white">{item.task}</span>
-                          </div>
-                          <div className="flex items-center gap-4 mt-1.5 text-xs text-zinc-400">
-                            <span>
-                              Owner:{" "}
-                              <strong style={{ color: spkColor(item.speaker) }}>{spk(item.speaker)}</strong>
-                            </span>
-                            <span>Due: {item.deadline}</span>
-                          </div>
+                    <div key={i} className="p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                      <div className="space-y-1">
+                        <div className="flex items-center gap-2">
+                          <span className="text-xs font-mono text-zinc-500">#{i + 1}</span>
+                          <span className="text-sm font-medium text-zinc-200">{item.task}</span>
+                        </div>
+                        <div className="flex items-center gap-3 text-xs text-zinc-400">
+                          <span>
+                            Assignee: <strong className="text-zinc-300 font-normal">@{spk(item.speaker)}</strong>
+                          </span>
+                          <span>·</span>
+                          <span>Due: {item.deadline}</span>
+                          <span>·</span>
+                          <span className="font-mono text-[11px] text-zinc-500">priority: {item.priority}</span>
                         </div>
                       </div>
 
-                      {/* 1-Click Action to create on GitHub */}
-                      <a
-                        href={ghIssues[i]?.prefillUrl}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="shrink-0 px-3 py-1.5 text-xs font-semibold rounded-lg bg-green-600/20 hover:bg-green-600/30 text-green-300 border border-green-500/30 transition-all flex items-center gap-1"
-                      >
-                        <span>🐙</span> Create Issue
-                      </a>
+                      <div className="flex items-center gap-2 shrink-0">
+                        <button
+                          onClick={() => seekTo(parseTs(item.timestamp))}
+                          className="px-2 py-1 rounded bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-[11px] font-mono text-zinc-400 hover:text-white transition-colors flex items-center gap-1"
+                        >
+                          <IconPlay className="w-2.5 h-2.5" />
+                          <span>{item.timestamp}</span>
+                        </button>
+                        <a
+                          href={ghIssues[i]?.prefillUrl}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="px-2.5 py-1 text-xs font-mono text-zinc-300 hover:text-white bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 rounded transition-colors flex items-center gap-1"
+                        >
+                          <span>Open Issue</span>
+                          <IconExternal />
+                        </a>
+                      </div>
                     </div>
                   ))}
-                  {analysis.actionItems.length === 0 && (
-                    <p className="text-xs text-zinc-500">No action items detected in this standup.</p>
-                  )}
                 </div>
               </div>
 
               {/* Blockers */}
               {analysis.blockers.length > 0 && (
-                <div className="p-5 rounded-2xl bg-red-950/20 border border-red-500/20">
-                  <h3 className="text-sm font-bold text-red-400 uppercase tracking-wider mb-3 flex items-center gap-2">
-                    <span>🚧</span> Blockers Raised
+                <div className="space-y-3">
+                  <h3 className="font-mono text-xs uppercase tracking-wider text-zinc-500">
+                    Identified Blockers
                   </h3>
-                  <div className="space-y-2">
+                  <div className="divide-y divide-zinc-800/60 border border-zinc-800/80 rounded-xl overflow-hidden bg-zinc-900/20">
                     {analysis.blockers.map((b, i) => (
-                      <div
-                        key={i}
-                        className="flex items-start justify-between gap-3 p-3.5 rounded-xl bg-zinc-900 border border-zinc-800"
-                      >
-                        <div className="flex items-start gap-3">
-                          <button
-                            onClick={() => seekTo(parseTs(b.timestamp))}
-                            className="text-xs font-mono text-red-400 hover:underline px-2 py-0.5 rounded bg-red-500/10 shrink-0 mt-0.5"
-                          >
-                            ▶ {b.timestamp}
-                          </button>
-                          <div>
-                            <div className="flex items-center gap-2">
-                              <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-red-500/20 text-red-300 uppercase">
-                                {b.severity}
-                              </span>
-                              <p className="text-sm font-medium text-zinc-200">{b.description}</p>
-                            </div>
-                            <p className="text-xs text-zinc-500 mt-1">
-                              Blocked team member:{" "}
-                              <strong style={{ color: spkColor(b.owner) }}>{spk(b.owner)}</strong>
-                            </p>
+                      <div key={i} className="p-4 flex items-start justify-between gap-4">
+                        <div className="space-y-1">
+                          <p className="text-sm font-medium text-zinc-200">{b.description}</p>
+                          <div className="flex items-center gap-2 text-xs text-zinc-400">
+                            <span>Blocked: @{spk(b.owner)}</span>
+                            <span>·</span>
+                            <span className="font-mono text-[10px] uppercase text-zinc-500">{b.severity}</span>
                           </div>
                         </div>
+                        <button
+                          onClick={() => seekTo(parseTs(b.timestamp))}
+                          className="shrink-0 px-2 py-1 rounded bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-[11px] font-mono text-zinc-400 hover:text-white transition-colors flex items-center gap-1"
+                        >
+                          <IconPlay className="w-2.5 h-2.5" />
+                          <span>{b.timestamp}</span>
+                        </button>
                       </div>
                     ))}
                   </div>
@@ -904,28 +919,26 @@ ${transcript.segments.map((s) => `**[${fmt(s.start)}] ${spk(s.speaker)}:** ${s.t
 
               {/* Decisions */}
               {analysis.decisions.length > 0 && (
-                <div className="p-5 rounded-2xl bg-purple-950/20 border border-purple-500/20">
-                  <h3 className="text-sm font-bold text-purple-400 uppercase tracking-wider mb-3 flex items-center gap-2">
-                    <span>✅</span> Architectural Decisions Agreed
+                <div className="space-y-3">
+                  <h3 className="font-mono text-xs uppercase tracking-wider text-zinc-500">
+                    Consensus Decisions
                   </h3>
-                  <div className="space-y-2">
+                  <div className="divide-y divide-zinc-800/60 border border-zinc-800/80 rounded-xl overflow-hidden bg-zinc-900/20">
                     {analysis.decisions.map((d, i) => (
-                      <div
-                        key={i}
-                        className="flex items-start gap-3 p-3.5 rounded-xl bg-zinc-900 border border-zinc-800"
-                      >
+                      <div key={i} className="p-4 flex items-start justify-between gap-4">
+                        <div className="space-y-1">
+                          <p className="text-sm font-medium text-zinc-200">{d.summary}</p>
+                          <span className="text-xs text-zinc-500">
+                            Participants: {d.speakers.map(spk).join(", ")}
+                          </span>
+                        </div>
                         <button
                           onClick={() => seekTo(parseTs(d.timestamp))}
-                          className="text-xs font-mono text-purple-400 hover:underline px-2 py-0.5 rounded bg-purple-500/10 shrink-0 mt-0.5"
+                          className="shrink-0 px-2 py-1 rounded bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-[11px] font-mono text-zinc-400 hover:text-white transition-colors flex items-center gap-1"
                         >
-                          ▶ {d.timestamp}
+                          <IconPlay className="w-2.5 h-2.5" />
+                          <span>{d.timestamp}</span>
                         </button>
-                        <div>
-                          <p className="text-sm font-medium text-zinc-200">{d.summary}</p>
-                          <p className="text-xs text-zinc-500 mt-1">
-                            Agreed by: {d.speakers.map(spk).join(", ")}
-                          </p>
-                        </div>
                       </div>
                     ))}
                   </div>
@@ -934,19 +947,17 @@ ${transcript.segments.map((s) => `**[${fmt(s.start)}] ${spk(s.speaker)}:** ${s.t
             </div>
           )}
 
-          {/* ── TAB 2: GitHub Issues Generator ── */}
+          {/* ── TAB 2: GitHub Issues ── */}
           {activeTab === "github" && (
             <div className="space-y-6">
-              {/* Repository Target Selector */}
-              <div className="p-4 rounded-xl bg-zinc-900 border border-zinc-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div className="p-4 rounded-xl bg-zinc-900/40 border border-zinc-800/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div className="flex items-center gap-2">
-                  <span className="text-sm text-zinc-400">Target GitHub Repository:</span>
+                  <span className="text-xs font-mono text-zinc-500">target_repo:</span>
                   <input
                     type="text"
                     value={targetRepo}
                     onChange={(e) => setTargetRepo(e.target.value)}
-                    placeholder="owner/repository"
-                    className="px-3 py-1.5 bg-zinc-950 border border-zinc-700 rounded-lg text-xs font-mono text-white focus:outline-none focus:border-green-500 w-64"
+                    className="px-2.5 py-1 bg-zinc-950 border border-zinc-800 rounded text-xs font-mono text-white focus:outline-none focus:border-zinc-600 w-56"
                   />
                 </div>
                 <button
@@ -956,146 +967,91 @@ ${transcript.segments.map((s) => `**[${fmt(s.start)}] ${spk(s.speaker)}:** ${s.t
                       .join("\n\n---\n\n");
                     copy(md, "all-gh");
                   }}
-                  className="px-3 py-1.5 text-xs font-medium bg-zinc-800 hover:bg-zinc-700 rounded-lg text-zinc-200 transition-all flex items-center gap-1.5"
+                  className="px-3 py-1.5 text-xs font-mono text-zinc-300 hover:text-white bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 rounded transition-colors flex items-center gap-1.5"
                 >
-                  <span>{copiedId === "all-gh" ? "✓ Copied!" : "📋"}</span>
-                  <span>Copy All Issues as Markdown</span>
+                  {copiedId === "all-gh" ? <IconCheck /> : <IconCopy />}
+                  <span>{copiedId === "all-gh" ? "Copied" : "Copy Markdown"}</span>
                 </button>
               </div>
 
-              {/* Issues List */}
               <div className="space-y-4">
                 {ghIssues.map((issue) => (
-                  <div key={issue.id} className="p-5 rounded-2xl bg-zinc-900 border border-zinc-800 space-y-3">
-                    <div className="flex items-center justify-between gap-3">
-                      <div className="flex items-center gap-2">
-                        <span className="w-2.5 h-2.5 rounded-full bg-green-500" />
-                        <h4 className="font-bold text-white text-sm sm:text-base">{issue.title}</h4>
+                  <div key={issue.id} className="p-5 rounded-xl bg-zinc-900/20 border border-zinc-800/80 space-y-3">
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="space-y-1">
+                        <span className="text-xs font-mono text-zinc-500">#{issue.id + 1}</span>
+                        <h4 className="font-medium text-zinc-200 text-sm">{issue.title}</h4>
                       </div>
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-2 shrink-0">
                         <button
                           onClick={() => copy(issue.body, `gh-${issue.id}`)}
-                          className="px-3 py-1.5 text-xs bg-zinc-800 hover:bg-zinc-700 rounded-lg text-zinc-300 transition-all"
+                          className="px-2.5 py-1 text-xs font-mono text-zinc-400 hover:text-white bg-zinc-900 border border-zinc-800 rounded transition-colors"
                         >
-                          {copiedId === `gh-${issue.id}` ? "✓ Copied" : "Copy Body"}
+                          {copiedId === `gh-${issue.id}` ? "Copied" : "Copy"}
                         </button>
                         <a
                           href={issue.prefillUrl}
                           target="_blank"
                           rel="noreferrer"
-                          className="px-3.5 py-1.5 text-xs font-semibold rounded-lg bg-green-600 hover:bg-green-500 text-white transition-all shadow-md flex items-center gap-1"
+                          className="px-2.5 py-1 text-xs font-mono text-white bg-zinc-800 hover:bg-zinc-700 rounded transition-colors flex items-center gap-1"
                         >
-                          <span>🚀</span> Open on GitHub
+                          <span>Open Issue</span>
+                          <IconExternal />
                         </a>
                       </div>
                     </div>
 
-                    <pre className="text-xs text-zinc-300 font-mono bg-zinc-950 p-4 rounded-xl border border-zinc-800/80 overflow-x-auto whitespace-pre-wrap">
+                    <pre className="text-xs text-zinc-400 font-mono bg-zinc-950/80 p-3.5 rounded-lg border border-zinc-800/60 overflow-x-auto whitespace-pre-wrap leading-relaxed">
                       {issue.body}
                     </pre>
-
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs text-zinc-500">Labels:</span>
-                      {issue.labels.map((l) => (
-                        <span
-                          key={l}
-                          className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-zinc-800 text-zinc-400"
-                        >
-                          {l}
-                        </span>
-                      ))}
-                    </div>
                   </div>
                 ))}
               </div>
             </div>
           )}
 
-          {/* ── TAB 3: Slack Digest ── */}
+          {/* ── TAB 3: Team Digest ── */}
           {activeTab === "slack" && (
             <div className="space-y-4">
               <div className="flex items-center justify-between">
-                <p className="text-xs text-zinc-400">
-                  Formatted for Slack `#standup` or `#engineering` channel with mrkdwn syntax:
-                </p>
+                <span className="text-xs font-mono text-zinc-500">
+                  mrkdwn payload formatted for Slack / Discord / Linear:
+                </span>
                 <button
                   onClick={() => copy(slackMsg, "slack-digest")}
-                  className="px-3 py-1.5 text-xs font-semibold bg-green-600 hover:bg-green-500 text-white rounded-lg transition-all flex items-center gap-1"
+                  className="px-3 py-1.5 text-xs font-mono text-zinc-200 hover:text-white bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 rounded transition-colors flex items-center gap-1.5"
                 >
-                  <span>{copiedId === "slack-digest" ? "✓ Copied to Clipboard!" : "📋"}</span>
-                  <span>Copy Slack Digest</span>
+                  {copiedId === "slack-digest" ? <IconCheck /> : <IconCopy />}
+                  <span>{copiedId === "slack-digest" ? "Copied" : "Copy Text"}</span>
                 </button>
               </div>
 
-              {/* Visual Slack Card Simulation */}
-              <div className="rounded-2xl bg-[#1a1d21] border border-zinc-800 p-6 shadow-2xl text-zinc-100">
-                <div className="flex items-center gap-3 mb-4 pb-3 border-b border-zinc-800">
-                  <div className="w-9 h-9 rounded-lg bg-green-600 flex items-center justify-center text-white font-bold text-sm">
-                    S
-                  </div>
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <span className="font-bold text-sm text-white">ShipNotes Bot</span>
-                      <span className="text-[10px] font-semibold px-1.5 py-0.5 bg-zinc-800 text-zinc-400 rounded">
-                        APP
-                      </span>
-                    </div>
-                    <span className="text-xs text-zinc-500">Today at {new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
-                  </div>
-                </div>
-
-                <div className="pl-12 text-sm leading-relaxed whitespace-pre-wrap font-sans space-y-1">
-                  {slackMsg.split("\n").map((line, i) => {
-                    const boldParts = line.split(/\*([^*]+)\*/g);
-                    return (
-                      <div key={i} className={line === "" ? "h-2" : ""}>
-                        {boldParts.map((part, j) =>
-                          j % 2 === 1 ? (
-                            <strong key={j} className="text-white font-semibold">
-                              {part}
-                            </strong>
-                          ) : (
-                            <span key={j} className="text-zinc-300">
-                              {part}
-                            </span>
-                          )
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
+              <div className="rounded-xl bg-zinc-950 border border-zinc-800/80 p-6 font-mono text-xs leading-relaxed text-zinc-300 whitespace-pre-wrap">
+                {slackMsg}
               </div>
             </div>
           )}
 
-          {/* ── TAB 4: Diarized Transcript ── */}
+          {/* ── TAB 4: Diarized Dialogue ── */}
           {activeTab === "transcript" && (
-            <div className="space-y-3 max-h-[650px] overflow-y-auto pr-2">
-              <p className="text-xs text-zinc-500 mb-2">
-                Click any dialogue line to seek audio playback to that exact timestamp:
-              </p>
-              {transcript.segments.map((seg, i) => {
-                const n = parseInt(seg.speaker.replace(/\D/g, "") || "0");
-                return (
-                  <div
-                    key={i}
-                    className={`p-4 rounded-xl cursor-pointer hover:brightness-125 transition-all speaker-bg-${
-                      n % 6
-                    } bg-zinc-900 border border-zinc-800`}
-                    onClick={() => seekTo(seg.start)}
-                  >
-                    <div className="flex items-center justify-between gap-2 mb-1.5">
-                      <span className="text-xs font-bold" style={{ color: spkColor(seg.speaker) }}>
-                        {spk(seg.speaker)}
-                      </span>
-                      <span className="text-xs font-mono text-zinc-500 hover:text-green-400">
-                        ▶ {fmt(seg.start)} - {fmt(seg.end)}
-                      </span>
-                    </div>
-                    <p className="text-sm text-zinc-300 leading-relaxed">{seg.text}</p>
+            <div className="divide-y divide-zinc-800/60 border border-zinc-800/80 rounded-xl overflow-hidden bg-zinc-900/10">
+              {transcript.segments.map((seg, i) => (
+                <div
+                  key={i}
+                  onClick={() => seekTo(seg.start)}
+                  className="p-4 hover:bg-zinc-900/30 transition-colors cursor-pointer flex items-start gap-4"
+                >
+                  <span className="font-mono text-xs text-zinc-500 shrink-0 w-16">
+                    {fmt(seg.start)}
+                  </span>
+                  <div className="space-y-1">
+                    <span className="text-xs font-medium text-zinc-300">
+                      {spk(seg.speaker)}
+                    </span>
+                    <p className="text-sm text-zinc-400 leading-relaxed">{seg.text}</p>
                   </div>
-                );
-              })}
+                </div>
+              ))}
             </div>
           )}
         </main>
