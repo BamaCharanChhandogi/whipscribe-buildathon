@@ -6,7 +6,7 @@ Record a 5-minute standup. ShipNotes transcribes it with speaker diarization via
 
 ## Live Demo
 
-🔗 **[shipnotes.vercel.app](https://shipnotes.vercel.app)** _(link active after deployment)_
+🔗 **[https://shipnotes-inky.vercel.app](https://shipnotes-inky.vercel.app)** *(Zero install, running live on Vercel)*
 
 ## The Problem
 
