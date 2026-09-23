@@ -1,11 +1,19 @@
 import type { Metadata } from "next";
-import { Plus_Jakarta_Sans, JetBrains_Mono } from "next/font/google";
+import { Plus_Jakarta_Sans, JetBrains_Mono, Merriweather } from "next/font/google";
 import "./globals.css";
 
 const jakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
   variable: "--font-sans",
   weight: ["400", "500", "600", "700"],
+  display: "swap",
+});
+
+const merriweather = Merriweather({
+  subsets: ["latin"],
+  variable: "--font-serif",
+  weight: ["400", "700"],
+  style: ["normal", "italic"],
   display: "swap",
 });
 
@@ -17,7 +25,7 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "ShipNotes — Sprint Standup to GitHub Issues + Slack",
+  title: "ShipNotes — Sprint Standups to GitHub Issues + Slack",
   description:
     "Autonomous engineering standup intelligence. Transforms raw developer voice notes into verified GitHub Issues and team digests via WhipScribe API.",
 };
@@ -28,8 +36,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${jakarta.variable} ${jetbrainsMono.variable} dark`}>
-      <body className="bg-[#09090b] text-[#f4f4f5] antialiased selection:bg-indigo-500/20 selection:text-indigo-200">
+    <html lang="en" className={`${jakarta.variable} ${merriweather.variable} ${jetbrainsMono.variable}`}>
+      <body className="bg-[#fafcf9] text-[#111827] antialiased selection:bg-[#d5e8da] selection:text-[#1e4d35]">
         {children}
       </body>
     </html>

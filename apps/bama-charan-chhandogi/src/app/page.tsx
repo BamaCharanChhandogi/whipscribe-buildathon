@@ -534,152 +534,256 @@ ${transcript.segments.map((s) => `[${fmt(s.start)}] ${spk(s.speaker)}: ${s.text}
   /* ── View 1: Landing & Capture ── */
   if (state === "idle" || state === "error") {
     return (
-      <div className="min-h-screen bg-[#090a0f] text-[#f0f3f8] flex flex-col justify-between p-6 sm:p-12 max-w-4xl mx-auto">
-        {/* Top Minimalist Header */}
-        <header className="flex items-center justify-between border-b border-[#1e2230] pb-4">
-          <div className="flex items-center gap-3">
-            <span className="font-mono text-xs uppercase tracking-wider text-indigo-400 font-semibold">
-              ShipNotes
-            </span>
-            <span className="text-[#363c54]">/</span>
-            <span className="text-xs text-[#9ba3b8] font-mono">buildathon-track-4</span>
-          </div>
-          <div className="flex items-center gap-4 text-xs font-mono text-[#9ba3b8]">
-            <span className="inline-flex items-center gap-1.5 text-slate-300">
-              <span className="w-1.5 h-1.5 bg-emerald-400" />
-              API Ready
-            </span>
-            <a
-              href="https://github.com/BamaCharanChhandogi/shipnotes"
-              target="_blank"
-              rel="noreferrer"
-              className="text-slate-300 hover:text-white transition-colors"
-            >
-              GitHub
-            </a>
+      <div className="min-h-screen bg-[#fafcf9] text-[#111827] flex flex-col justify-between">
+        {/* WhipScribe Signature Top Navbar */}
+        <header className="bg-white border-b border-[#e2ede5] px-6 py-3.5 sticky top-0 z-30">
+          <div className="max-w-5xl mx-auto flex items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              {/* WhipScribe Logo */}
+              <div className="flex items-center gap-2">
+                <div className="w-7 h-7 rounded-lg bg-[#88d927] text-black font-black text-sm flex items-center justify-center shadow-xs">
+                  w
+                </div>
+                <span className="font-bold text-lg text-[#111827] tracking-tight">WhipScribe</span>
+                <span className="text-[10px] font-mono uppercase px-1.5 py-0.5 rounded border border-gray-300 text-gray-500 font-medium">
+                  beta
+                </span>
+              </div>
+              <span className="text-gray-300">/</span>
+              <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-[#edf7f0] text-[#1e4d35] border border-[#d5e8da]">
+                Track 4 · ShipNotes
+              </span>
+            </div>
+
+            <div className="flex items-center gap-4 text-xs">
+              <span className="hidden sm:inline-flex items-center gap-1.5 text-[#1e4d35] font-medium bg-[#edf7f0] px-2.5 py-1 rounded-full border border-[#d5e8da]">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#276244] animate-pulse" />
+                API Online
+              </span>
+              <a
+                href="https://github.com/BamaCharanChhandogi/shipnotes"
+                target="_blank"
+                rel="noreferrer"
+                className="text-[#4b5563] hover:text-[#111827] font-medium flex items-center gap-1 transition-colors"
+              >
+                <span>GitHub</span>
+                <IconExternal className="w-3 h-3" />
+              </a>
+            </div>
           </div>
         </header>
 
         {/* Hero Section */}
-        <main className="my-auto py-12 space-y-8">
-          <div className="space-y-3">
-            <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-white">
-              Sprint standups to GitHub backlog.
+        <main className="max-w-4xl mx-auto px-6 py-10 w-full space-y-10 my-auto">
+          {/* WhipScribe Signature Editorial Hero */}
+          <div className="text-center space-y-4 pt-2">
+            <h1 className="text-4xl sm:text-5xl font-serif font-bold text-[#111827] tracking-tight">
+              Stop listening. Start{" "}
+              <span className="italic text-[#1e4d35] underline decoration-[#1e4d35] decoration-2 underline-offset-8">
+                shipping
+              </span>
+              .
             </h1>
-            <p className="text-[#9ba3b8] text-sm sm:text-base max-w-xl leading-relaxed">
-              Capture engineering voice notes. WhipScribe diarizes speakers, Gemini extracts actionable commitments, and ShipNotes drafts verified GitHub Issues without manual typing.
+            <p className="text-[#4b5563] text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">
+              <strong className="text-[#111827]">Private</strong> — transcribed on WhipScribe GPU servers with speaker diarization.{" "}
+              <strong className="text-[#111827]">Fast</strong> — 5-minute standup processed in seconds.{" "}
+              <strong className="text-[#111827]">Actionable</strong> — commits directly to GitHub Issues and Slack digests.
             </p>
           </div>
 
-          {/* Evaluator 1-Click Test Vector */}
-          <div className="p-4 bg-[#10121a] border border-[#1e2230] rounded flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div className="space-y-1">
-              <div className="flex items-center gap-2">
-                <span className="text-xs font-mono text-indigo-400 font-medium">vector: sample-standup.wav</span>
-                <span className="text-[11px] font-mono text-[#5e667e]">2 speakers · 36s</span>
+          {/* WhipScribe Action Deck (Inspired by Library top cards) */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
+            {/* Card 1: 1-Click Instant Preview */}
+            <div
+              onClick={handleInstantPreview}
+              className="p-4 bg-white hover:bg-[#f2f9f4] border border-[#d5e8da] hover:border-[#276244] rounded-xl transition-all cursor-pointer shadow-xs group flex flex-col justify-between"
+            >
+              <div className="space-y-1.5">
+                <div className="w-8 h-8 rounded-lg bg-[#edf7f0] group-hover:bg-[#1e4d35] group-hover:text-white text-[#1e4d35] flex items-center justify-center transition-colors">
+                  <IconPlay className="w-4 h-4" />
+                </div>
+                <h3 className="font-semibold text-sm text-[#111827] group-hover:text-[#1e4d35] pt-1">
+                  1-Click Preview
+                </h3>
+                <p className="text-xs text-[#6b7280] leading-snug">
+                  0s instant evaluator demo with sample standup
+                </p>
               </div>
-              <p className="text-xs text-[#9ba3b8]">
-                Auth refactor, Stripe webhook blocker, PostgreSQL migration consensus.
-              </p>
+              <span className="text-[11px] font-semibold text-[#1e4d35] mt-3 block">
+                Open Instant Demo →
+              </span>
             </div>
-            <div className="flex items-center gap-2 shrink-0">
-              <button
-                onClick={handleInstantPreview}
-                className="px-3.5 py-1.5 text-xs font-medium bg-[#f0f3f8] text-[#090a0f] hover:bg-white rounded transition-colors"
+
+            {/* Card 2: Run Live API on Sample */}
+            <div
+              onClick={handleTrySampleLive}
+              className="p-4 bg-white hover:bg-[#f2f9f4] border border-[#d5e8da] hover:border-[#276244] rounded-xl transition-all cursor-pointer shadow-xs group flex flex-col justify-between"
+            >
+              <div className="space-y-1.5">
+                <div className="w-8 h-8 rounded-lg bg-[#edf7f0] group-hover:bg-[#1e4d35] group-hover:text-white text-[#1e4d35] flex items-center justify-center transition-colors">
+                  <span className="font-mono text-xs font-bold">API</span>
+                </div>
+                <h3 className="font-semibold text-sm text-[#111827] group-hover:text-[#1e4d35] pt-1">
+                  Run Live API
+                </h3>
+                <p className="text-xs text-[#6b7280] leading-snug">
+                  Process sample-standup.wav on WhipScribe GPU
+                </p>
+              </div>
+              <span className="text-[11px] font-semibold text-[#1e4d35] mt-3 block">
+                Run GPU Pipeline →
+              </span>
+            </div>
+
+            {/* Card 3: Record Live Mic */}
+            <div
+              onClick={() => {
+                if (!isRecording) startRecording();
+                else stopRecording();
+              }}
+              className={`p-4 border rounded-xl transition-all cursor-pointer shadow-xs flex flex-col justify-between ${
+                isRecording
+                  ? "bg-red-50 border-red-300"
+                  : "bg-white hover:bg-[#f2f9f4] border-[#d5e8da] hover:border-[#276244]"
+              }`}
+            >
+              <div className="space-y-1.5">
+                <div
+                  className={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors ${
+                    isRecording ? "bg-red-500 text-white animate-pulse" : "bg-[#edf7f0] text-[#1e4d35]"
+                  }`}
+                >
+                  <IconMic className="w-4 h-4" />
+                </div>
+                <h3 className="font-semibold text-sm text-[#111827] pt-1">
+                  {isRecording ? "Recording..." : "Record Audio"}
+                </h3>
+                <p className="text-xs text-[#6b7280] leading-snug">
+                  {isRecording ? `${fmt(recordSeconds)} elapsed` : "Start with your browser microphone"}
+                </p>
+              </div>
+              <span
+                className={`text-[11px] font-semibold mt-3 block ${
+                  isRecording ? "text-red-600" : "text-[#1e4d35]"
+                }`}
               >
-                Instant Preview (0s)
-              </button>
-              <button
-                onClick={handleTrySampleLive}
-                className="px-3 py-1.5 text-xs font-mono text-slate-300 hover:text-white bg-[#161822] hover:bg-[#1f2230] border border-[#2b3044] rounded transition-colors"
-              >
-                Run Live API
-              </button>
+                {isRecording ? "Click to Stop & Submit" : "Start Recording →"}
+              </span>
+            </div>
+
+            {/* Card 4: Upload Audio File */}
+            <div
+              onClick={() => fileRef.current?.click()}
+              className="p-4 bg-white hover:bg-[#f2f9f4] border border-[#d5e8da] hover:border-[#276244] rounded-xl transition-all cursor-pointer shadow-xs group flex flex-col justify-between"
+            >
+              <div className="space-y-1.5">
+                <div className="w-8 h-8 rounded-lg bg-[#edf7f0] group-hover:bg-[#1e4d35] group-hover:text-white text-[#1e4d35] flex items-center justify-center transition-colors">
+                  <IconUpload className="w-4 h-4" />
+                </div>
+                <h3 className="font-semibold text-sm text-[#111827] group-hover:text-[#1e4d35] pt-1">
+                  Upload Files
+                </h3>
+                <p className="text-xs text-[#6b7280] leading-snug">
+                  Audio or video · MP3, WAV, M4A, WebM
+                </p>
+              </div>
+              <span className="text-[11px] font-semibold text-[#1e4d35] mt-3 block">
+                Select from Disk →
+              </span>
             </div>
           </div>
 
-          {/* Capture Panel: Live Mic + Dropzone */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {/* Live Mic Panel */}
-            <div className="p-5 bg-[#10121a] border border-[#1e2230] rounded flex flex-col justify-between space-y-4">
-              <div className="space-y-1">
-                <span className="font-mono text-[11px] uppercase tracking-wider text-[#5e667e]">Input 01</span>
-                <h3 className="text-sm font-medium text-white">Browser Microphone</h3>
-                <p className="text-xs text-[#9ba3b8]">Record a brief standup update directly from your device.</p>
+          {/* WhipScribe Styled Upload Hero Card (Matching Image 2 / 3) */}
+          <div
+            onDragOver={(e) => e.preventDefault()}
+            onDrop={(e) => {
+              e.preventDefault();
+              const f = e.dataTransfer.files[0];
+              if (f) handleUpload(f);
+            }}
+            className="p-8 sm:p-10 bg-[#f2f9f4] border-2 border-dashed border-[#d5e8da] rounded-2xl text-center space-y-4"
+          >
+            {/* 3 Line-Art Icons (Mic, Waveform, Camera doodle like Image 2) */}
+            <div className="flex items-center justify-center gap-3 text-[#276244]">
+              <div className="w-10 h-10 rounded-xl bg-white border border-[#d5e8da] flex items-center justify-center shadow-xs">
+                <IconMic className="w-5 h-5" />
               </div>
-
-              {!isRecording ? (
-                <button
-                  onClick={startRecording}
-                  className="w-full py-2 px-3 bg-[#161822] hover:bg-[#1f2230] border border-[#2b3044] text-xs font-medium text-slate-200 hover:text-white rounded transition-colors flex items-center justify-center gap-2"
-                >
-                  <IconMic className="w-3.5 h-3.5 text-indigo-400" />
-                  <span>Record Live Audio</span>
-                </button>
-              ) : (
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between text-xs font-mono text-slate-300">
-                    <span className="inline-flex items-center gap-1.5 text-red-400 font-medium">
-                      <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
-                      RECORDING
-                    </span>
-                    <span className="font-mono">{fmt(recordSeconds)}</span>
-                  </div>
-                  <button
-                    onClick={stopRecording}
-                    className="w-full py-2 px-3 bg-red-950/70 hover:bg-red-900/80 border border-red-800 text-xs font-medium text-red-200 rounded transition-colors flex items-center justify-center gap-2"
-                  >
-                    <IconStop className="w-3.5 h-3.5" />
-                    <span>Stop and Process</span>
-                  </button>
-                </div>
-              )}
+              <div className="w-10 h-10 rounded-xl bg-white border border-[#d5e8da] flex items-center justify-center shadow-xs">
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M3 10v4m4-8v12m4-14v16m4-10v4m4-8v12" />
+                </svg>
+              </div>
+              <div className="w-10 h-10 rounded-xl bg-white border border-[#d5e8da] flex items-center justify-center shadow-xs">
+                <IconUpload className="w-5 h-5" />
+              </div>
             </div>
 
-            {/* Dropzone Panel */}
-            <div
-              onClick={() => fileRef.current?.click()}
-              onDragOver={(e) => e.preventDefault()}
-              onDrop={(e) => {
-                e.preventDefault();
-                const f = e.dataTransfer.files[0];
+            <div className="space-y-1">
+              <h2 className="text-lg font-semibold text-[#111827]">
+                Drag & drop your standup recording here
+              </h2>
+              <p className="text-xs text-[#6b7280]">
+                Supports MP3, WAV, M4A, AAC, WebM up to 50MB · Multi-speaker diarization enabled
+              </p>
+            </div>
+
+            <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
+              <button
+                onClick={() => fileRef.current?.click()}
+                className="px-5 py-2.5 bg-[#1e4d35] hover:bg-[#183f2a] text-white text-xs font-semibold rounded-lg shadow-sm transition-colors"
+              >
+                Choose Audio File
+              </button>
+              <button
+                onClick={handleInstantPreview}
+                className="px-4 py-2.5 bg-white hover:bg-gray-50 border border-[#d5e8da] text-[#1e4d35] text-xs font-semibold rounded-lg shadow-xs transition-colors"
+              >
+                Instant Preview (sample-standup.wav)
+              </button>
+            </div>
+
+            <input
+              ref={fileRef}
+              type="file"
+              accept="audio/*,video/*,.mp3,.wav,.m4a,.mp4,.webm,.ogg,.flac"
+              className="hidden"
+              onChange={(e) => {
+                const f = e.target.files?.[0];
                 if (f) handleUpload(f);
               }}
-              className="p-5 bg-[#10121a] border border-[#1e2230] hover:border-[#3b4259] rounded transition-colors cursor-pointer flex flex-col justify-between space-y-4 group"
-            >
-              <div className="space-y-1">
-                <span className="font-mono text-[11px] uppercase tracking-wider text-[#5e667e]">Input 02</span>
-                <h3 className="text-sm font-medium text-white">Audio File</h3>
-                <p className="text-xs text-[#9ba3b8]">Drop an existing MP3, WAV, M4A, or WebM recording.</p>
-              </div>
+            />
+          </div>
 
-              <div className="py-2 px-3 border border-dashed border-[#2b3044] group-hover:border-[#3b4259] rounded text-center text-xs text-[#9ba3b8] group-hover:text-white transition-colors flex items-center justify-center gap-2 bg-[#0d0e14]">
-                <IconUpload className="w-3.5 h-3.5 text-indigo-400" />
-                <span>Select file from disk</span>
-              </div>
-              <input
-                ref={fileRef}
-                type="file"
-                accept="audio/*,video/*,.mp3,.wav,.m4a,.mp4,.webm,.ogg,.flac"
-                className="hidden"
-                onChange={(e) => {
-                  const f = e.target.files?.[0];
-                  if (f) handleUpload(f);
-                }}
-              />
+          {/* Configuration Card: Target Repository */}
+          <div className="p-4 bg-white border border-[#e2ede5] rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs shadow-xs">
+            <div className="space-y-0.5">
+              <label htmlFor="repo-input" className="font-semibold text-[#111827] block">
+                Target GitHub Repository
+              </label>
+              <p className="text-[#6b7280] text-[11px]">
+                Clicking &quot;Open on GitHub&quot; pre-fills issue tickets directly into this repository.
+              </p>
             </div>
+            <input
+              id="repo-input"
+              type="text"
+              value={targetRepo}
+              onChange={(e) => setTargetRepo(e.target.value)}
+              className="px-3 py-1.5 bg-[#fafcf9] border border-[#d5e8da] focus:border-[#1e4d35] focus:outline-none rounded-lg font-mono text-xs text-[#111827] w-full sm:w-64"
+              placeholder="owner/repo"
+            />
           </div>
 
           {/* Error Notice */}
           {state === "error" && (
-            <div className="p-3 bg-red-950/40 border border-red-800 rounded text-xs text-red-200 flex items-center justify-between">
+            <div className="p-4 bg-red-50 border border-red-200 rounded-xl text-xs text-red-800 flex items-center justify-between">
               <span>{error}</span>
               <button
                 onClick={() => {
                   setState("idle");
                   setError("");
                 }}
-                className="underline hover:text-white font-medium"
+                className="underline hover:text-red-950 font-semibold"
               >
                 Reset
               </button>
@@ -687,61 +791,81 @@ ${transcript.segments.map((s) => `[${fmt(s.start)}] ${spk(s.speaker)}: ${s.text}
           )}
         </main>
 
-        {/* Footer */}
-        <footer className="pt-4 border-t border-[#1e2230] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-xs text-[#5e667e] font-mono">
-          <span>Candidate: Bama Charan Chhandogi</span>
-          <span>Engine: WhipScribe GPU Transcription + Gemini Synthesis</span>
+        {/* WhipScribe Signature Footer */}
+        <footer className="bg-white border-t border-[#e2ede5] py-4 px-6 text-xs text-[#6b7280]">
+          <div className="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
+            <span>
+              ShipNotes by <strong>Bama Charan Chhandogi</strong> · WhipScribe Buildathon Track 4
+            </span>
+            <div className="flex items-center gap-4">
+              <a href="https://bamacharan.com" target="_blank" rel="noreferrer" className="hover:text-[#111827]">
+                bamacharan.com
+              </a>
+              <span>·</span>
+              <a href="https://github.com/BamaCharanChhandogi" target="_blank" rel="noreferrer" className="hover:text-[#111827]">
+                GitHub
+              </a>
+              <span>·</span>
+              <a href="https://www.linkedin.com/in/bamacharanchhandogi/" target="_blank" rel="noreferrer" className="hover:text-[#111827]">
+                LinkedIn
+              </a>
+            </div>
+          </div>
         </footer>
       </div>
     );
   }
 
-  /* ── View 2: Processing State ── */
+  /* ── View 2: Processing State (WhipScribe Style) ── */
   if (state === "uploading" || state === "processing" || state === "analyzing") {
     const stepLabel =
       state === "uploading"
-        ? "Uploading audio payload..."
+        ? "Uploading audio to WhipScribe GPU cluster..."
         : state === "processing"
         ? "Running WhipScribe GPU diarization & word alignment..."
-        : "Extracting action items and engineering commitments...";
+        : "Extracting action items, blockers, and decisions with Gemini...";
 
     return (
-      <div className="min-h-screen bg-[#090a0f] text-[#f0f3f8] flex flex-col items-center justify-center p-6">
-        <div className="w-full max-w-md space-y-4 p-5 bg-[#10121a] border border-[#1e2230] rounded">
-          <div className="flex items-center justify-between text-xs font-mono text-[#9ba3b8] border-b border-[#1e2230] pb-2.5">
-            <span className="flex items-center gap-1.5 text-indigo-400 font-medium">
-              <span className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse" />
-              {state === "uploading" ? "Payload Transfer" : state === "processing" ? "GPU Diarization" : "AI Synthesis"}
-            </span>
-            <span>Elapsed: {processSeconds}s</span>
+      <div className="min-h-screen bg-[#fafcf9] text-[#111827] flex flex-col items-center justify-center p-6">
+        <div className="w-full max-w-md bg-white border border-[#d5e8da] rounded-2xl p-6 shadow-sm space-y-5">
+          <div className="flex items-center justify-between text-xs border-b border-[#e2ede5] pb-3">
+            <div className="flex items-center gap-2">
+              <div className="w-5 h-5 rounded bg-[#88d927] text-black font-black text-xs flex items-center justify-center">
+                w
+              </div>
+              <span className="font-semibold text-[#1e4d35]">
+                {state === "uploading" ? "Audio Transfer" : state === "processing" ? "GPU Diarization" : "AI Synthesis"}
+              </span>
+            </div>
+            <span className="font-mono text-[#6b7280]">Elapsed: {processSeconds}s</span>
           </div>
 
           <div className="space-y-2">
             <div className="flex items-center justify-between text-xs">
-              <span className="text-white font-medium">{stepLabel}</span>
-              <span className="font-mono text-indigo-400 font-medium">{jobProgress}%</span>
+              <span className="text-[#111827] font-medium">{stepLabel}</span>
+              <span className="font-mono font-bold text-[#1e4d35]">{jobProgress}%</span>
             </div>
             {/* Progress bar */}
-            <div className="w-full h-1 bg-[#161822] rounded overflow-hidden">
+            <div className="w-full h-2 bg-[#edf7f0] rounded-full overflow-hidden">
               <div
-                className="h-full bg-indigo-500 transition-all duration-300 ease-out"
+                className="h-full bg-[#1e4d35] transition-all duration-300 ease-out rounded-full"
                 style={{ width: `${Math.max(jobProgress, 8)}%` }}
               />
             </div>
           </div>
 
-          <div className="text-[11px] font-mono text-[#5e667e] flex items-center justify-between pt-1">
-            <span>{fileName || `job: ${jobId.slice(0, 12)}`}</span>
-            <span>Est. ~25s</span>
+          <div className="text-[11px] text-[#6b7280] flex items-center justify-between pt-1">
+            <span className="font-mono truncate max-w-[200px]">{fileName || `job: ${jobId.slice(0, 14)}`}</span>
+            <span>Est. ~15-25s total</span>
           </div>
 
-          <div className="pt-2 border-t border-[#1e2230] flex justify-end">
+          <div className="pt-2 border-t border-[#e2ede5] flex justify-end">
             <button
               onClick={() => {
                 setState("idle");
                 setError("");
               }}
-              className="text-xs font-mono text-[#9ba3b8] hover:text-white underline"
+              className="text-xs text-[#6b7280] hover:text-[#111827] underline"
             >
               Cancel
             </button>
@@ -751,22 +875,23 @@ ${transcript.segments.map((s) => `[${fmt(s.start)}] ${spk(s.speaker)}: ${s.text}
     );
   }
 
-  /* ── View 3: Complete Executive Results ── */
+  /* ── View 3: Complete Executive Results (WhipScribe Dashboard Style) ── */
   if (state === "done" && analysis && transcript) {
     const ghIssues = generateGitHubIssues();
     const slackMsg = generateSlackDigest();
 
     return (
-      <div className="min-h-screen bg-[#090a0f] text-[#f0f3f8] pb-24">
+      <div className="min-h-screen bg-[#fafcf9] text-[#111827] pb-24">
         {/* Navigation Sticky Topbar */}
-        <header className="sticky top-0 z-40 bg-[#090a0f]/95 backdrop-blur border-b border-[#1e2230] px-6 py-3">
+        <header className="sticky top-0 z-40 bg-white/95 backdrop-blur border-b border-[#e2ede5] px-6 py-3">
           <div className="max-w-5xl mx-auto flex items-center justify-between gap-4">
             <div className="flex items-center gap-3">
-              <span className="font-mono text-xs uppercase tracking-wider text-indigo-400 font-semibold">
-                ShipNotes
-              </span>
-              <span className="text-[#363c54]">/</span>
-              <span className="text-xs text-slate-300 font-mono truncate max-w-xs">
+              <div className="w-6 h-6 rounded bg-[#88d927] text-black font-black text-xs flex items-center justify-center">
+                w
+              </div>
+              <span className="font-bold text-sm text-[#111827]">ShipNotes</span>
+              <span className="text-gray-300">/</span>
+              <span className="text-xs text-[#4b5563] font-medium truncate max-w-xs">
                 {analysis.title}
               </span>
             </div>
@@ -774,7 +899,7 @@ ${transcript.segments.map((s) => `[${fmt(s.start)}] ${spk(s.speaker)}: ${s.text}
             <div className="flex items-center gap-2">
               <button
                 onClick={downloadMarkdownReport}
-                className="px-3 py-1 text-xs font-mono text-slate-300 hover:text-white bg-[#10121a] hover:bg-[#161822] border border-[#1e2230] rounded transition-colors flex items-center gap-1.5"
+                className="px-3 py-1.5 text-xs font-semibold text-white bg-[#1e4d35] hover:bg-[#183f2a] rounded-lg transition-colors flex items-center gap-1.5 shadow-xs"
               >
                 <IconDownload />
                 <span>Export .md</span>
@@ -785,61 +910,68 @@ ${transcript.segments.map((s) => `[${fmt(s.start)}] ${spk(s.speaker)}: ${s.text}
                   setTranscript(null);
                   setAnalysis(null);
                 }}
-                className="px-3 py-1 text-xs font-mono text-slate-300 hover:text-white bg-[#10121a] hover:bg-[#161822] border border-[#1e2230] rounded transition-colors"
+                className="px-3 py-1.5 text-xs font-medium text-[#374151] hover:text-[#111827] bg-white hover:bg-[#f2f9f4] border border-[#d5e8da] rounded-lg transition-colors"
               >
-                New Session
+                ← New Standup
               </button>
             </div>
           </div>
         </header>
 
         <main className="max-w-5xl mx-auto px-6 pt-6 space-y-6">
-          {/* Executive Header Box */}
-          <div className="p-5 bg-[#10121a] border border-[#1e2230] rounded space-y-4">
-            <div className="space-y-1.5">
+          {/* Executive Header Box (WhipScribe Soft Mint Style) */}
+          <div className="p-6 bg-[#f2f9f4] border border-[#d5e8da] rounded-2xl space-y-4">
+            <div className="space-y-2">
               <div className="flex items-center gap-2">
-                <span className="px-2 py-0.5 rounded text-[11px] font-mono bg-[#161822] border border-[#2b3044] text-[#9ba3b8]">
+                <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-white border border-[#d5e8da] text-[#1e4d35]">
                   {fmt(transcript.duration)} duration
                 </span>
-                <span className="px-2 py-0.5 rounded text-[11px] font-mono bg-[#161822] border border-[#2b3044] text-[#9ba3b8]">
-                  {Object.keys(analysis.speakerMap).length} participants
+                <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-white border border-[#d5e8da] text-[#1e4d35]">
+                  {Object.keys(analysis.speakerMap).length} speakers
+                </span>
+                <span className="px-2.5 py-0.5 rounded-full text-xs font-mono bg-white border border-[#d5e8da] text-[#6b7280]">
+                  target: {targetRepo}
                 </span>
               </div>
-              <h1 className="text-xl sm:text-2xl font-semibold tracking-tight text-white">{analysis.title}</h1>
-              <p className="text-[#9ba3b8] text-sm leading-relaxed max-w-3xl">{analysis.summary}</p>
+              <h1 className="text-2xl sm:text-3xl font-serif font-bold tracking-tight text-[#111827]">
+                {analysis.title}
+              </h1>
+              <p className="text-[#374151] text-sm sm:text-base leading-relaxed max-w-3xl">
+                {analysis.summary}
+              </p>
             </div>
 
-            {/* Compact Bottom Bar: Speakers + Audio Player */}
-            <div className="pt-3 border-t border-[#1e2230] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            {/* Bottom Controls: Speaker Renaming + Compact Audio Player */}
+            <div className="pt-3 border-t border-[#d5e8da] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               {/* Speakers List */}
               <div className="flex flex-wrap items-center gap-2">
-                <span className="text-[11px] font-mono uppercase tracking-wider text-[#5e667e] mr-1">
+                <span className="text-xs font-semibold text-[#1e4d35] mr-1">
                   Speakers:
                 </span>
                 {Object.entries(analysis.speakerMap).map(([id, stats]) => (
                   <div
                     key={id}
-                    className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded bg-[#161822] border border-[#2b3044] text-xs"
+                    className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white border border-[#d5e8da] text-xs shadow-2xs"
                   >
-                    <span className="w-1.5 h-1.5 bg-indigo-400" />
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#1e4d35]" />
                     <input
-                      className="bg-transparent border-b border-transparent hover:border-[#3b4259] focus:border-indigo-400 text-slate-200 focus:outline-none w-24 text-xs font-mono"
+                      className="bg-transparent border-b border-transparent hover:border-[#276244] focus:border-[#1e4d35] text-[#111827] font-medium focus:outline-none w-24 text-xs"
                       value={speakerNames[id] || (id === "Unknown" ? "Bama (Dev)" : id)}
                       placeholder={id}
                       onChange={(e) =>
                         setSpeakerNames((prev) => ({ ...prev, [id]: e.target.value }))
                       }
                     />
-                    <span className="text-[#5e667e] font-mono text-[10px]">({fmt(stats.totalTime)})</span>
+                    <span className="text-[#6b7280] text-[11px]">({fmt(stats.totalTime)})</span>
                   </div>
                 ))}
               </div>
 
-              {/* Compact Inline Audio Player (Never Stretched) */}
+              {/* Compact Inline Audio Player */}
               {audioUrl && (
-                <div className="flex items-center gap-2 px-2.5 py-1 rounded bg-[#161822] border border-[#2b3044] shrink-0">
-                  <span className="text-[11px] font-mono text-[#9ba3b8] flex items-center gap-1">
-                    <IconPlay className="w-2.5 h-2.5 text-indigo-400" />
+                <div className="flex items-center gap-2 px-2.5 py-1 rounded-lg bg-white border border-[#d5e8da] shrink-0 shadow-2xs">
+                  <span className="text-xs font-semibold text-[#1e4d35] flex items-center gap-1">
+                    <IconPlay className="w-3 h-3 text-[#1e4d35]" />
                     Audio
                   </span>
                   <audio ref={audioRef} src={audioUrl} controls className="h-6 w-44" />
@@ -848,52 +980,55 @@ ${transcript.segments.map((s) => `[${fmt(s.start)}] ${spk(s.speaker)}: ${s.text}
             </div>
           </div>
 
-          {/* GitHub-Style Underline Tabs */}
-          <div className="flex border-b border-[#1e2230] gap-6 text-xs font-mono">
+          {/* WhipScribe Underline Tabs (Matching "All files" / "Folders" in Image 1) */}
+          <div className="flex border-b border-[#e2ede5] gap-6 text-sm">
             {(
               [
-                { id: "actions", label: `Action Items (${analysis.actionItems.length})` },
+                { id: "actions", label: `Action Items & Blockers (${analysis.actionItems.length})` },
                 { id: "github", label: `GitHub Issues (${ghIssues.length})` },
-                { id: "slack", label: `Team Digest` },
+                { id: "slack", label: `Team Slack Digest` },
                 { id: "transcript", label: `Diarized Transcript` },
               ] as const
             ).map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`pb-2.5 transition-colors relative ${
-                  activeTab === tab.id ? "text-white font-medium" : "text-[#9ba3b8] hover:text-white"
+                className={`pb-3 transition-colors relative font-medium ${
+                  activeTab === tab.id ? "text-[#1e4d35] font-semibold" : "text-[#6b7280] hover:text-[#111827]"
                 }`}
               >
                 {tab.label}
                 {activeTab === tab.id && (
-                  <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-indigo-500" />
+                  <span className="absolute bottom-0 left-0 right-0 h-[2.5px] bg-[#1e4d35] rounded-t-full" />
                 )}
               </button>
             ))}
           </div>
 
-          {/* ── TAB 1: Action Items ── */}
+          {/* ── TAB 1: Action Items & Blockers ── */}
           {activeTab === "actions" && (
             <div className="space-y-6">
               {/* Shipped Items */}
               {analysis.shipped.length > 0 && (
-                <div className="space-y-2">
-                  <span className="font-mono text-[11px] uppercase tracking-wider text-emerald-400 font-medium">
-                    Shipped Achievements
-                  </span>
-                  <div className="divide-y divide-[#1e2230] border border-[#1e2230] rounded bg-[#10121a]">
+                <div className="space-y-2.5">
+                  <div className="flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-[#1e4d35]" />
+                    <span className="text-xs font-bold uppercase tracking-wider text-[#1e4d35]">
+                      Shipped Yesterday
+                    </span>
+                  </div>
+                  <div className="divide-y divide-[#e2ede5] border border-[#d5e8da] rounded-xl bg-white shadow-xs">
                     {analysis.shipped.map((item, i) => (
-                      <div key={i} className="p-3.5 flex items-start justify-between gap-4">
-                        <div className="space-y-0.5">
-                          <p className="text-sm font-medium text-white">{item.description}</p>
-                          <span className="text-xs text-[#9ba3b8] font-mono">
-                            Owner: <span className="text-slate-200">{spk(item.speaker)}</span>
+                      <div key={i} className="p-4 flex items-start justify-between gap-4">
+                        <div className="space-y-1">
+                          <p className="text-sm font-semibold text-[#111827]">{item.description}</p>
+                          <span className="text-xs text-[#6b7280]">
+                            Owner: <strong className="text-[#111827]">{spk(item.speaker)}</strong>
                           </span>
                         </div>
                         <button
                           onClick={() => seekTo(parseTs(item.timestamp))}
-                          className="shrink-0 px-2 py-0.5 rounded bg-[#161822] hover:bg-[#1f2230] border border-[#2b3044] text-[11px] font-mono text-emerald-400 hover:text-white transition-colors flex items-center gap-1"
+                          className="shrink-0 px-2.5 py-1 rounded-lg bg-[#edf7f0] hover:bg-[#d8ebde] border border-[#d5e8da] text-xs font-mono font-semibold text-[#1e4d35] transition-colors flex items-center gap-1.5"
                         >
                           <IconPlay className="w-2.5 h-2.5" />
                           <span>{item.timestamp}</span>
@@ -905,31 +1040,44 @@ ${transcript.segments.map((s) => `[${fmt(s.start)}] ${spk(s.speaker)}: ${s.text}
               )}
 
               {/* Action Items */}
-              <div className="space-y-2">
-                <span className="font-mono text-[11px] uppercase tracking-wider text-indigo-400 font-medium">
-                  Committed Action Items
-                </span>
-                <div className="divide-y divide-[#1e2230] border border-[#1e2230] rounded bg-[#10121a]">
+              <div className="space-y-2.5">
+                <div className="flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-[#1e4d35]" />
+                  <span className="text-xs font-bold uppercase tracking-wider text-[#1e4d35]">
+                    Committed Action Items
+                  </span>
+                </div>
+                <div className="divide-y divide-[#e2ede5] border border-[#d5e8da] rounded-xl bg-white shadow-xs">
                   {analysis.actionItems.map((item, i) => (
-                    <div key={i} className="p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                    <div key={i} className="p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                       <div className="space-y-1">
                         <div className="flex items-center gap-2">
-                          <span className="text-xs font-mono text-[#5e667e]">#{i + 1}</span>
-                          <span className="text-sm font-medium text-white">{item.task}</span>
+                          <span className="text-xs font-mono text-[#6b7280]">#{i + 1}</span>
+                          <span className="text-sm font-semibold text-[#111827]">{item.task}</span>
                         </div>
-                        <div className="flex items-center gap-2.5 text-xs text-[#9ba3b8] font-mono">
-                          <span>Assignee: @{spk(item.speaker)}</span>
+                        <div className="flex items-center gap-2.5 text-xs text-[#6b7280]">
+                          <span>
+                            Assignee: <strong className="text-[#111827]">@{spk(item.speaker)}</strong>
+                          </span>
                           <span>·</span>
                           <span>Due: {item.deadline}</span>
                           <span>·</span>
-                          <span className="text-[#5e667e]">priority: {item.priority}</span>
+                          <span
+                            className={`px-1.5 py-0.2 rounded text-[10px] uppercase font-bold ${
+                              item.priority === "high"
+                                ? "bg-red-50 text-red-700 border border-red-200"
+                                : "bg-blue-50 text-blue-700 border border-blue-200"
+                            }`}
+                          >
+                            {item.priority}
+                          </span>
                         </div>
                       </div>
 
                       <div className="flex items-center gap-2 shrink-0">
                         <button
                           onClick={() => seekTo(parseTs(item.timestamp))}
-                          className="px-2 py-0.5 rounded bg-[#161822] hover:bg-[#1f2230] border border-[#2b3044] text-[11px] font-mono text-indigo-400 hover:text-white transition-colors flex items-center gap-1"
+                          className="px-2.5 py-1 rounded-lg bg-[#edf7f0] hover:bg-[#d8ebde] border border-[#d5e8da] text-xs font-mono font-semibold text-[#1e4d35] transition-colors flex items-center gap-1.5"
                         >
                           <IconPlay className="w-2.5 h-2.5" />
                           <span>{item.timestamp}</span>
@@ -938,10 +1086,10 @@ ${transcript.segments.map((s) => `[${fmt(s.start)}] ${spk(s.speaker)}: ${s.text}
                           href={ghIssues[i]?.prefillUrl}
                           target="_blank"
                           rel="noreferrer"
-                          className="px-2.5 py-0.5 text-xs font-mono text-slate-200 hover:text-white bg-[#161822] hover:bg-[#1f2230] border border-[#2b3044] rounded transition-colors flex items-center gap-1"
+                          className="px-3 py-1 text-xs font-semibold text-white bg-[#1e4d35] hover:bg-[#183f2a] rounded-lg transition-colors flex items-center gap-1.5 shadow-2xs"
                         >
-                          <span>Open Issue</span>
-                          <IconExternal />
+                          <span>Open on GitHub</span>
+                          <IconExternal className="w-3 h-3" />
                         </a>
                       </div>
                     </div>
@@ -951,24 +1099,29 @@ ${transcript.segments.map((s) => `[${fmt(s.start)}] ${spk(s.speaker)}: ${s.text}
 
               {/* Blockers */}
               {analysis.blockers.length > 0 && (
-                <div className="space-y-2">
-                  <span className="font-mono text-[11px] uppercase tracking-wider text-red-400 font-medium">
-                    Identified Blockers
-                  </span>
-                  <div className="divide-y divide-[#1e2230] border border-[#1e2230] rounded bg-[#10121a]">
+                <div className="space-y-2.5">
+                  <div className="flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-red-500" />
+                    <span className="text-xs font-bold uppercase tracking-wider text-red-700">
+                      Identified Blockers
+                    </span>
+                  </div>
+                  <div className="divide-y divide-red-200 border border-red-200 rounded-xl bg-red-50/50 shadow-xs">
                     {analysis.blockers.map((b, i) => (
-                      <div key={i} className="p-3.5 flex items-start justify-between gap-4">
-                        <div className="space-y-0.5">
-                          <p className="text-sm font-medium text-red-200">{b.description}</p>
-                          <div className="flex items-center gap-2 text-xs text-[#9ba3b8] font-mono">
+                      <div key={i} className="p-4 flex items-start justify-between gap-4">
+                        <div className="space-y-1">
+                          <p className="text-sm font-semibold text-red-900">{b.description}</p>
+                          <div className="flex items-center gap-2 text-xs text-red-700">
                             <span>Blocked: @{spk(b.owner)}</span>
                             <span>·</span>
-                            <span className="text-red-400 uppercase text-[10px]">{b.severity}</span>
+                            <span className="font-bold uppercase text-[10px] bg-red-100 px-1.5 py-0.5 rounded border border-red-300">
+                              {b.severity}
+                            </span>
                           </div>
                         </div>
                         <button
                           onClick={() => seekTo(parseTs(b.timestamp))}
-                          className="shrink-0 px-2 py-0.5 rounded bg-[#161822] hover:bg-[#1f2230] border border-[#2b3044] text-[11px] font-mono text-red-400 hover:text-white transition-colors flex items-center gap-1"
+                          className="shrink-0 px-2.5 py-1 rounded-lg bg-white hover:bg-red-50 border border-red-300 text-xs font-mono font-bold text-red-700 transition-colors flex items-center gap-1"
                         >
                           <IconPlay className="w-2.5 h-2.5" />
                           <span>{b.timestamp}</span>
@@ -981,22 +1134,25 @@ ${transcript.segments.map((s) => `[${fmt(s.start)}] ${spk(s.speaker)}: ${s.text}
 
               {/* Decisions */}
               {analysis.decisions.length > 0 && (
-                <div className="space-y-2">
-                  <span className="font-mono text-[11px] uppercase tracking-wider text-amber-400 font-medium">
-                    Consensus Decisions
-                  </span>
-                  <div className="divide-y divide-[#1e2230] border border-[#1e2230] rounded bg-[#10121a]">
+                <div className="space-y-2.5">
+                  <div className="flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-amber-500" />
+                    <span className="text-xs font-bold uppercase tracking-wider text-amber-800">
+                      Consensus Decisions
+                    </span>
+                  </div>
+                  <div className="divide-y divide-amber-200 border border-amber-200 rounded-xl bg-amber-50/50 shadow-xs">
                     {analysis.decisions.map((d, i) => (
-                      <div key={i} className="p-3.5 flex items-start justify-between gap-4">
-                        <div className="space-y-0.5">
-                          <p className="text-sm font-medium text-white">{d.summary}</p>
-                          <span className="text-xs text-[#9ba3b8] font-mono">
-                            Agreed by: {d.speakers.map(spk).join(", ")}
+                      <div key={i} className="p-4 flex items-start justify-between gap-4">
+                        <div className="space-y-1">
+                          <p className="text-sm font-semibold text-amber-950">{d.summary}</p>
+                          <span className="text-xs text-amber-800">
+                            Agreed by: <strong>{d.speakers.map(spk).join(", ")}</strong>
                           </span>
                         </div>
                         <button
                           onClick={() => seekTo(parseTs(d.timestamp))}
-                          className="shrink-0 px-2 py-0.5 rounded bg-[#161822] hover:bg-[#1f2230] border border-[#2b3044] text-[11px] font-mono text-amber-400 hover:text-white transition-colors flex items-center gap-1"
+                          className="shrink-0 px-2.5 py-1 rounded-lg bg-white hover:bg-amber-100 border border-amber-300 text-xs font-mono font-bold text-amber-800 transition-colors flex items-center gap-1"
                         >
                           <IconPlay className="w-2.5 h-2.5" />
                           <span>{d.timestamp}</span>
@@ -1012,14 +1168,14 @@ ${transcript.segments.map((s) => `[${fmt(s.start)}] ${spk(s.speaker)}: ${s.text}
           {/* ── TAB 2: GitHub Issues ── */}
           {activeTab === "github" && (
             <div className="space-y-4">
-              <div className="p-3 bg-[#10121a] border border-[#1e2230] rounded flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div className="p-4 bg-white border border-[#d5e8da] rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-xs">
                 <div className="flex items-center gap-2">
-                  <span className="text-xs font-mono text-[#5e667e]">target_repo:</span>
+                  <span className="text-xs font-semibold text-[#1e4d35]">Target Repository:</span>
                   <input
                     type="text"
                     value={targetRepo}
                     onChange={(e) => setTargetRepo(e.target.value)}
-                    className="px-2 py-1 bg-[#090a0f] border border-[#2b3044] rounded text-xs font-mono text-white focus:outline-none focus:border-indigo-400 w-56"
+                    className="px-2.5 py-1 bg-[#fafcf9] border border-[#d5e8da] rounded-lg text-xs font-mono text-[#111827] focus:outline-none focus:border-[#1e4d35] w-56 font-medium"
                   />
                 </div>
                 <button
@@ -1029,7 +1185,7 @@ ${transcript.segments.map((s) => `[${fmt(s.start)}] ${spk(s.speaker)}: ${s.text}
                       .join("\n\n---\n\n");
                     copy(md, "all-gh");
                   }}
-                  className="px-3 py-1 text-xs font-mono text-slate-300 hover:text-white bg-[#161822] hover:bg-[#1f2230] border border-[#2b3044] rounded transition-colors flex items-center gap-1.5"
+                  className="px-3 py-1.5 text-xs font-semibold text-[#1e4d35] hover:text-white bg-[#edf7f0] hover:bg-[#1e4d35] border border-[#d5e8da] rounded-lg transition-colors flex items-center gap-1.5 shadow-2xs"
                 >
                   {copiedId === "all-gh" ? <IconCheck /> : <IconCopy />}
                   <span>{copiedId === "all-gh" ? "Copied" : "Copy All Issues (.md)"}</span>
@@ -1038,16 +1194,16 @@ ${transcript.segments.map((s) => `[${fmt(s.start)}] ${spk(s.speaker)}: ${s.text}
 
               <div className="space-y-3">
                 {ghIssues.map((issue) => (
-                  <div key={issue.id} className="p-4 bg-[#10121a] border border-[#1e2230] rounded space-y-3">
+                  <div key={issue.id} className="p-4 bg-white border border-[#d5e8da] rounded-xl space-y-3 shadow-xs">
                     <div className="flex items-start justify-between gap-3">
                       <div className="space-y-0.5">
-                        <span className="text-xs font-mono text-[#5e667e]">#{issue.id + 1}</span>
-                        <h4 className="font-medium text-white text-sm">{issue.title}</h4>
+                        <span className="text-xs font-mono text-[#6b7280]">Issue #{issue.id + 1}</span>
+                        <h4 className="font-semibold text-[#111827] text-sm">{issue.title}</h4>
                       </div>
                       <div className="flex items-center gap-2 shrink-0">
                         <button
                           onClick={() => copy(issue.body, `gh-${issue.id}`)}
-                          className="px-2 py-0.5 text-xs font-mono text-[#9ba3b8] hover:text-white bg-[#161822] border border-[#2b3044] rounded transition-colors"
+                          className="px-2.5 py-1 text-xs font-medium text-[#4b5563] hover:text-[#111827] bg-[#fafcf9] border border-[#d5e8da] rounded-lg transition-colors"
                         >
                           {copiedId === `gh-${issue.id}` ? "Copied" : "Copy"}
                         </button>
@@ -1055,15 +1211,15 @@ ${transcript.segments.map((s) => `[${fmt(s.start)}] ${spk(s.speaker)}: ${s.text}
                           href={issue.prefillUrl}
                           target="_blank"
                           rel="noreferrer"
-                          className="px-2.5 py-0.5 text-xs font-mono text-slate-200 hover:text-white bg-[#161822] hover:bg-[#1f2230] border border-[#2b3044] rounded transition-colors flex items-center gap-1"
+                          className="px-3 py-1 text-xs font-semibold text-white bg-[#1e4d35] hover:bg-[#183f2a] rounded-lg transition-colors flex items-center gap-1 shadow-2xs"
                         >
                           <span>Open Issue</span>
-                          <IconExternal />
+                          <IconExternal className="w-3 h-3" />
                         </a>
                       </div>
                     </div>
 
-                    <pre className="text-xs text-[#9ba3b8] font-mono bg-[#090a0f] p-3 rounded border border-[#1e2230] overflow-x-auto whitespace-pre-wrap leading-relaxed">
+                    <pre className="text-xs text-[#374151] font-mono bg-[#f4faf5] p-3.5 rounded-lg border border-[#d5e8da] overflow-x-auto whitespace-pre-wrap leading-relaxed">
                       {issue.body}
                     </pre>
                   </div>
@@ -1072,45 +1228,45 @@ ${transcript.segments.map((s) => `[${fmt(s.start)}] ${spk(s.speaker)}: ${s.text}
             </div>
           )}
 
-          {/* ── TAB 3: Team Digest ── */}
+          {/* ── TAB 3: Team Slack Digest ── */}
           {activeTab === "slack" && (
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-mono text-[#9ba3b8]">
-                  Formatted for Slack, Discord, or Linear:
+                <span className="text-xs text-[#4b5563]">
+                  Ready to copy and paste directly into your <strong>#standup</strong> channel:
                 </span>
                 <button
                   onClick={() => copy(slackMsg, "slack-digest")}
-                  className="px-3 py-1 text-xs font-mono text-slate-200 hover:text-white bg-[#10121a] hover:bg-[#161822] border border-[#1e2230] rounded transition-colors flex items-center gap-1.5"
+                  className="px-3 py-1.5 text-xs font-semibold text-white bg-[#1e4d35] hover:bg-[#183f2a] rounded-lg transition-colors flex items-center gap-1.5 shadow-xs"
                 >
                   {copiedId === "slack-digest" ? <IconCheck /> : <IconCopy />}
-                  <span>{copiedId === "slack-digest" ? "Copied" : "Copy Text"}</span>
+                  <span>{copiedId === "slack-digest" ? "Copied" : "Copy Slack Digest"}</span>
                 </button>
               </div>
 
-              <div className="p-4 bg-[#10121a] border border-[#1e2230] rounded font-mono text-xs leading-relaxed text-[#f0f3f8] whitespace-pre-wrap">
+              <div className="p-5 bg-white border border-[#d5e8da] rounded-xl font-mono text-xs leading-relaxed text-[#111827] whitespace-pre-wrap shadow-xs">
                 {slackMsg}
               </div>
             </div>
           )}
 
-          {/* ── TAB 4: Diarized Dialogue ── */}
+          {/* ── TAB 4: Diarized Transcript ── */}
           {activeTab === "transcript" && (
-            <div className="divide-y divide-[#1e2230] border border-[#1e2230] rounded bg-[#10121a]">
+            <div className="divide-y divide-[#e2ede5] border border-[#d5e8da] rounded-xl bg-white shadow-xs overflow-hidden">
               {transcript.segments.map((seg, i) => (
                 <div
                   key={i}
                   onClick={() => seekTo(seg.start)}
-                  className="p-3.5 hover:bg-[#161822] transition-colors cursor-pointer flex items-start gap-4"
+                  className="p-4 hover:bg-[#f2f9f4] transition-colors cursor-pointer flex items-start gap-4"
                 >
-                  <span className="font-mono text-xs text-indigo-400 shrink-0 w-14">
+                  <span className="font-mono text-xs font-semibold text-[#1e4d35] shrink-0 w-14 pt-0.5">
                     {fmt(seg.start)}
                   </span>
-                  <div className="space-y-0.5">
-                    <span className="text-xs font-medium text-slate-200">
+                  <div className="space-y-1">
+                    <span className="text-xs font-bold text-[#111827] bg-[#edf7f0] border border-[#d5e8da] px-2 py-0.5 rounded">
                       {spk(seg.speaker)}
                     </span>
-                    <p className="text-sm text-[#9ba3b8] leading-relaxed">{seg.text}</p>
+                    <p className="text-sm text-[#374151] leading-relaxed pt-1">{seg.text}</p>
                   </div>
                 </div>
               ))}
