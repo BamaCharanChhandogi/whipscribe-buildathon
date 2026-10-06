@@ -117,6 +117,22 @@ function IconDownload({ className = "w-3 h-3" }: { className?: string }) {
   );
 }
 
+function IconBolt({ className = "w-3 h-3" }: { className?: string }) {
+  return (
+    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+    </svg>
+  );
+}
+
+function IconSlack({ className = "w-3.5 h-3.5" }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="currentColor">
+      <path d="M5.042 15.165a2.528 2.528 0 0 1-2.52 2.523A2.528 2.528 0 0 1 0 15.165a2.527 2.527 0 0 1 2.522-2.52h2.52v2.52zM6.313 15.165a2.527 2.527 0 0 1 2.521-2.52 2.527 2.527 0 0 1 2.521 2.52v6.313A2.528 2.528 0 0 1 8.834 24a2.528 2.528 0 0 1-2.521-2.522v-6.313zM8.834 5.042a2.528 2.528 0 0 1-2.521-2.52A2.528 2.528 0 0 1 8.834 0a2.528 2.528 0 0 1 2.521 2.522v2.52H8.834zM8.834 6.313a2.528 2.528 0 0 1 2.521 2.521 2.528 2.528 0 0 1-2.521 2.521H2.522A2.528 2.528 0 0 1 0 8.834a2.528 2.528 0 0 1 2.522-2.521h6.312zM18.956 8.834a2.528 2.528 0 0 1 2.522-2.521A2.528 2.528 0 0 1 24 8.834a2.528 2.528 0 0 1-2.522 2.521h-2.522V8.834zM17.688 8.834a2.528 2.528 0 0 1-2.523 2.521 2.527 2.527 0 0 1-2.52-2.521V2.522A2.527 2.527 0 0 1 15.165 0a2.528 2.528 0 0 1 2.523 2.522v6.312zM15.165 18.956a2.528 2.528 0 0 1 2.523 2.522A2.528 2.528 0 0 1 15.165 24a2.527 2.527 0 0 1-2.52-2.522v-2.522h2.52zM15.165 17.688a2.527 2.527 0 0 1-2.52-2.523 2.527 2.527 0 0 1 2.52-2.52h6.313A2.527 2.527 0 0 1 24 15.165a2.528 2.528 0 0 1-2.522 2.523h-6.313z"/>
+    </svg>
+  );
+}
+
 /* ───────── Evaluation Vector (Instant 0s Preview) ───────── */
 const SAMPLE_TRANSCRIPT: Transcript = {
   duration: 36,
@@ -213,6 +229,12 @@ export default function Home() {
   });
   const [targetRepo, setTargetRepo] = useState<string>("BamaCharanChhandogi/shipnotes");
   const [copiedId, setCopiedId] = useState<string | null>(null);
+
+  /* Integration states */
+  const [createdIssues, setCreatedIssues] = useState<Record<number, { number: number; url: string }>>({});
+  const [isCreatingIssue, setIsCreatingIssue] = useState<Record<number, boolean>>({});
+  const [slackPostState, setSlackPostState] = useState<"idle" | "posting" | "success" | "error">("idle");
+  const [slackPostMsg, setSlackPostMsg] = useState<string>("");
 
   /* Audio state */
   const fileRef = useRef<HTMLInputElement>(null);
@@ -487,6 +509,61 @@ export default function Home() {
     }
     lines.push("_Generated via ShipNotes · WhipScribe API_");
     return lines.join("\n");
+  };
+
+  /* ── Direct GitHub Issue Creator ── */
+  const handleCreateGitHubIssue = async (
+    index: number,
+    issue: { title: string; body: string; labels: string[] }
+  ) => {
+    try {
+      setIsCreatingIssue((prev) => ({ ...prev, [index]: true }));
+      const res = await fetch("/api/integrations/github", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          repo: targetRepo,
+          title: issue.title,
+          body: issue.body,
+          labels: issue.labels,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Failed to create issue");
+      setCreatedIssues((prev) => ({
+        ...prev,
+        [index]: { number: data.issueNumber, url: data.issueUrl },
+      }));
+    } catch (err: any) {
+      alert("GitHub Issue Error: " + (err.message || err));
+    } finally {
+      setIsCreatingIssue((prev) => ({ ...prev, [index]: false }));
+    }
+  };
+
+  /* ── Direct Slack Webhook Poster ── */
+  const handlePostToSlack = async () => {
+    try {
+      setSlackPostState("posting");
+      const digestText = generateSlackDigest();
+      const res = await fetch("/api/integrations/slack", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title: analysis?.title || "Sprint Standup",
+          digestText,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Failed to post to Slack");
+      setSlackPostState("success");
+      setSlackPostMsg("Delivered live to #general on Slack!");
+      setTimeout(() => setSlackPostState("idle"), 4000);
+    } catch (err: any) {
+      setSlackPostState("error");
+      setSlackPostMsg(err.message || "Failed to post to Slack");
+      setTimeout(() => setSlackPostState("idle"), 4000);
+    }
   };
 
   /* ── Download Markdown Report ── */
@@ -1078,18 +1155,43 @@ ${transcript.segments.map((s) => `[${fmt(s.start)}] ${spk(s.speaker)}: ${s.text}
                         <button
                           onClick={() => seekTo(parseTs(item.timestamp))}
                           className="px-2.5 py-1 rounded-lg bg-[#edf7f0] hover:bg-[#d8ebde] border border-[#d5e8da] text-xs font-mono font-semibold text-[#1e4d35] transition-colors flex items-center gap-1.5"
+                          title="Seek audio to timestamp"
                         >
                           <IconPlay className="w-2.5 h-2.5" />
                           <span>{item.timestamp}</span>
                         </button>
+
+                        {/* Direct GitHub Issue API Button */}
+                        {createdIssues[i] ? (
+                          <a
+                            href={createdIssues[i].url}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="px-3 py-1 text-xs font-bold text-white bg-emerald-700 hover:bg-emerald-800 rounded-lg transition-colors flex items-center gap-1.5 shadow-2xs"
+                          >
+                            <span>Issue #{createdIssues[i].number}</span>
+                            <IconExternal className="w-3 h-3" />
+                          </a>
+                        ) : (
+                          <button
+                            onClick={() => handleCreateGitHubIssue(i, ghIssues[i])}
+                            disabled={isCreatingIssue[i]}
+                            className="px-3 py-1 text-xs font-semibold text-white bg-[#1e4d35] hover:bg-[#183f2a] disabled:opacity-60 rounded-lg transition-colors flex items-center gap-1.5 shadow-2xs"
+                            title="Directly create issue in target repo via GitHub API"
+                          >
+                            <IconBolt className="w-3 h-3 text-[#88d927]" />
+                            <span>{isCreatingIssue[i] ? "Creating..." : "Create Issue"}</span>
+                          </button>
+                        )}
+
                         <a
                           href={ghIssues[i]?.prefillUrl}
                           target="_blank"
                           rel="noreferrer"
-                          className="px-3 py-1 text-xs font-semibold text-white bg-[#1e4d35] hover:bg-[#183f2a] rounded-lg transition-colors flex items-center gap-1.5 shadow-2xs"
+                          className="p-1 text-xs font-semibold text-[#4b5563] hover:text-[#111827] bg-[#fafcf9] hover:bg-[#edf7f0] border border-[#d5e8da] rounded-lg transition-colors"
+                          title="Open pre-filled form on GitHub"
                         >
-                          <span>Open on GitHub</span>
-                          <IconExternal className="w-3 h-3" />
+                          <IconExternal className="w-3.5 h-3.5" />
                         </a>
                       </div>
                     </div>
@@ -1207,14 +1309,34 @@ ${transcript.segments.map((s) => `[${fmt(s.start)}] ${spk(s.speaker)}: ${s.text}
                         >
                           {copiedId === `gh-${issue.id}` ? "Copied" : "Copy"}
                         </button>
+                        {createdIssues[issue.id] ? (
+                          <a
+                            href={createdIssues[issue.id].url}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="px-3 py-1 text-xs font-bold text-white bg-emerald-700 hover:bg-emerald-800 rounded-lg transition-colors flex items-center gap-1 shadow-2xs"
+                          >
+                            <span>Issue #{createdIssues[issue.id].number}</span>
+                            <IconExternal className="w-3 h-3" />
+                          </a>
+                        ) : (
+                          <button
+                            onClick={() => handleCreateGitHubIssue(issue.id, issue)}
+                            disabled={isCreatingIssue[issue.id]}
+                            className="px-3 py-1 text-xs font-semibold text-white bg-[#1e4d35] hover:bg-[#183f2a] disabled:opacity-60 rounded-lg transition-colors flex items-center gap-1 shadow-2xs"
+                          >
+                            <IconBolt className="w-3 h-3 text-[#88d927]" />
+                            <span>{isCreatingIssue[issue.id] ? "Creating..." : "Create Issue"}</span>
+                          </button>
+                        )}
                         <a
                           href={issue.prefillUrl}
                           target="_blank"
                           rel="noreferrer"
-                          className="px-3 py-1 text-xs font-semibold text-white bg-[#1e4d35] hover:bg-[#183f2a] rounded-lg transition-colors flex items-center gap-1 shadow-2xs"
+                          className="p-1 text-xs font-semibold text-[#4b5563] hover:text-[#111827] bg-[#fafcf9] hover:bg-[#edf7f0] border border-[#d5e8da] rounded-lg transition-colors"
+                          title="Open prefilled form on GitHub"
                         >
-                          <span>Open Issue</span>
-                          <IconExternal className="w-3 h-3" />
+                          <IconExternal className="w-3.5 h-3.5" />
                         </a>
                       </div>
                     </div>
@@ -1231,18 +1353,47 @@ ${transcript.segments.map((s) => `[${fmt(s.start)}] ${spk(s.speaker)}: ${s.text}
           {/* ── TAB 3: Team Slack Digest ── */}
           {activeTab === "slack" && (
             <div className="space-y-3">
-              <div className="flex items-center justify-between">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <span className="text-xs text-[#4b5563]">
-                  Ready to copy and paste directly into your <strong>#standup</strong> channel:
+                  Ready to stream directly into your <strong>#standup</strong> channel on Slack:
                 </span>
-                <button
-                  onClick={() => copy(slackMsg, "slack-digest")}
-                  className="px-3 py-1.5 text-xs font-semibold text-white bg-[#1e4d35] hover:bg-[#183f2a] rounded-lg transition-colors flex items-center gap-1.5 shadow-xs"
-                >
-                  {copiedId === "slack-digest" ? <IconCheck /> : <IconCopy />}
-                  <span>{copiedId === "slack-digest" ? "Copied" : "Copy Slack Digest"}</span>
-                </button>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => copy(slackMsg, "slack-digest")}
+                    className="px-3 py-1.5 text-xs font-semibold text-[#1e4d35] hover:text-white bg-[#edf7f0] hover:bg-[#1e4d35] border border-[#d5e8da] rounded-lg transition-colors flex items-center gap-1.5 shadow-2xs"
+                  >
+                    {copiedId === "slack-digest" ? <IconCheck /> : <IconCopy />}
+                    <span>{copiedId === "slack-digest" ? "Copied" : "Copy Digest"}</span>
+                  </button>
+
+                  <button
+                    onClick={handlePostToSlack}
+                    disabled={slackPostState === "posting"}
+                    className="px-3.5 py-1.5 text-xs font-bold text-white bg-[#4A154B] hover:bg-[#3d113e] disabled:opacity-60 rounded-lg transition-colors flex items-center gap-1.5 shadow-xs"
+                  >
+                    <IconSlack className="w-3.5 h-3.5 text-white" />
+                    <span>
+                      {slackPostState === "posting"
+                        ? "Posting..."
+                        : slackPostState === "success"
+                        ? "✅ Sent to Slack!"
+                        : "Post Live to Slack"}
+                    </span>
+                  </button>
+                </div>
               </div>
+
+              {slackPostState === "success" && (
+                <div className="p-3 bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs rounded-xl flex items-center gap-2 font-medium">
+                  <IconCheck className="w-4 h-4 text-emerald-600" />
+                  <span>{slackPostMsg || "Successfully delivered standup summary to your Slack channel!"}</span>
+                </div>
+              )}
+              {slackPostState === "error" && (
+                <div className="p-3 bg-red-50 border border-red-200 text-red-800 text-xs rounded-xl">
+                  {slackPostMsg}
+                </div>
+              )}
 
               <div className="p-5 bg-white border border-[#d5e8da] rounded-xl font-mono text-xs leading-relaxed text-[#111827] whitespace-pre-wrap shadow-xs">
                 {slackMsg}
